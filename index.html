@@ -35,10 +35,15 @@
             <button id="captureBtn">📸 Tirar Foto & Gerar QR Code</button>
         </div>
 
-        <div id="result" style="display: none;">
+        <div id="result" style="display: none; text-align: center;">
             <p id="status">A processar...</p>
-            <div id="qrcode"></div>
-            <p style="font-size: 0.8rem; margin-top: 10px;">Digitalize para baixar no seu telemóvel</p>
+            <div class="result-content">
+                <img id="finalPreview" src="" alt="Prévia da foto gerada" style="display: none;">
+                <div class="qr-container">
+                    <div id="qrcode"></div>
+                    <p style="font-size: 0.8rem; margin-top: 10px;">Digitalize para baixar</p>
+                </div>
+            </div>
         </div>
     </div>
 

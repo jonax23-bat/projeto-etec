@@ -51,10 +51,11 @@
 
     /* Controlos e Botões */
     .controls {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        flex-direction: column;
         gap: 15px;
         margin-top: 10px;
+        align-items: center;
     }
 
     select, button {
@@ -64,12 +65,13 @@
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
+        width: 100%;
+        max-width: 400px;
     }
 
     select {
         background: #333;
         color: white;
-        grid-column: span 2;
     }
 
     button {
@@ -91,7 +93,6 @@
     #captureBtn {
         background: linear-gradient(135deg, #00d4ff, #0055ff);
         color: white;
-        grid-column: span 2;
         font-size: 1.1rem;
     }
 
@@ -122,5 +123,30 @@
 
     #status {
         color: #00d4ff;
-        font-size: 0.9rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .result-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap; /* Quebra linha em telas pequenas */
+    }
+
+    #finalPreview {
+        max-width: 250px;
+        height: auto;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        border: 2px solid #00d4ff;
+    }
+
+    .qr-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }

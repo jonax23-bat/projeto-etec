@@ -118,6 +118,13 @@ function enviarParaCloudinary(base64Image) {
                 height: 250,
                 correctLevel : QRCode.CorrectLevel.M
             });
+
+            // Mostra a prévia da imagem
+            const finalPreview = document.getElementById('finalPreview');
+            if (finalPreview) {
+                finalPreview.src = urlFinalIA;
+                finalPreview.style.display = 'block';
+            }
             
             statusTxt.innerText = "✅ Foto pronta!";
         }
