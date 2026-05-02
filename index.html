@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo AI Lab - Booth</title>
+    <link rel="stylesheet" href="stely.css">
+</head>
+<body>
+
+    <h1>Photo AI Lab</h1>
+
+    <div class="app-card">
+        <div id="container">
+            <video id="video" autoplay></video>
+            <img id="overlay" src="" style="display: none;">
+            <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+
+        <div class="controls">
+            <select id="aiStyle">
+                <option value="e_cartoonify">🎨 Estilo Desenho Animado</option>
+                <option value="e_oil_paint">🖌️ Pintura a Óleo</option>
+                <option value="e_art:incognito">🎭 Filtro Mistério</option>
+                <option value="e_improve">✨ Auto-Correção Pro</option>
+               <option value="e_gen_background_replace:prompt_outer%20space%20with%20aliens%20stars%20planets%20cartoon%20style">🚀 Espaço Sideral</option>
+             
+                <option value="e_bg_removal/l_fada_floresta,c_fill,w_1.0,h_1.0,fl_relative/fl_layer_apply">🧚 Floresta Encantada</option>
+            </select>
+           
+            
+            <button id="uploadBtn">📁 Anexar Imagem</button>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            
+            <button id="captureBtn">📸 Tirar Foto & Gerar QR Code</button>
+        </div>
+
+        <div id="result" style="display: none;">
+            <p id="status">A processar...</p>
+            <div id="qrcode"></div>
+            <p style="font-size: 0.8rem; margin-top: 10px;">Digitalize para baixar no seu telemóvel</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

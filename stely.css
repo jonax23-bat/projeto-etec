@@ -1,0 +1,126 @@
+/* Definições Gerais */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #00d4ff;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 30px;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    /* Contentor Principal */
+    .app-card {
+        background: #1e1e1e;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        border: 1px solid #333;
+        max-width: 700px;
+        width: 100%;
+    }
+
+    #container {
+        position: relative;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        line-height: 0; /* Remove espaços extras sob o vídeo */
+    }
+
+    video, canvas {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    #overlay { 
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+        pointer-events: none; z-index: 10; 
+    }
+
+    /* Controlos e Botões */
+    .controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    select, button {
+        padding: 12px;
+        border-radius: 8px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    select {
+        background: #333;
+        color: white;
+        grid-column: span 2;
+    }
+
+    button {
+        background: #333;
+        color: white;
+    }
+
+    button:hover:not(:disabled) {
+        background: #444;
+        transform: translateY(-2px);
+    }
+
+    button:disabled, select:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        filter: grayscale(0.5);
+    }
+
+    #captureBtn {
+        background: linear-gradient(135deg, #00d4ff, #0055ff);
+        color: white;
+        grid-column: span 2;
+        font-size: 1.1rem;
+    }
+
+    #captureBtn:hover:not(:disabled) {
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    }
+
+    #uploadBtn {
+        background: #28a745;
+    }
+
+    /* Área do QR Code */
+    #result {
+        margin-top: 30px;
+        padding: 20px;
+        background: #252525;
+        border-radius: 15px;
+        display: none; /* Escondido até ter a foto */
+    }
+
+    #qrcode {
+        background: white;
+        padding: 10px;
+        display: inline-block;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    #status {
+        color: #00d4ff;
+        font-size: 0.9rem;
+    }
