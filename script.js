@@ -139,3 +139,22 @@ function enviarParaCloudinary(base64Image) {
         statusTxt.innerText = "❌ Erro: " + err.message; 
     });
 }
+
+// 8. RESETAR PROJETO
+document.getElementById('resetBtn').addEventListener('click', () => {
+    // Esconde a área de resultado
+    resultDiv.style.display = 'none';
+    
+    // Limpa a foto
+    const finalPreview = document.getElementById('finalPreview');
+    if (finalPreview) {
+        finalPreview.src = "";
+        finalPreview.style.display = 'none';
+    }
+    
+    // Limpa o QR Code
+    document.getElementById('qrcode').innerHTML = "";
+    
+    // Volta o texto de status
+    statusTxt.innerText = "A processar...";
+});
