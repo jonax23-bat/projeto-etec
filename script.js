@@ -27,10 +27,10 @@ let slideInterval = null;
 // --- NAVEGAÇÃO COM VALIDAÇÃO ---
 getEl('startBtn').addEventListener('click', async () => {
     const landing = getEl('landingPage');
-    const app = getEl('mainApp');
+    const themeSelection = getEl('themeSelection');
     const startBtn = getEl('startBtn');
 
-    if (landing && app) {
+    if (landing && themeSelection) {
         startBtn.innerText = "VERIFICANDO...";
         startBtn.disabled = true;
 
@@ -38,8 +38,7 @@ getEl('startBtn').addEventListener('click', async () => {
 
         if (apiAtiva) {
             landing.style.display = 'none';
-            app.style.display = 'flex';
-            iniciarCamera();
+            themeSelection.style.display = 'flex';
         } else {
             startBtn.innerText = "ERRO DE CONEXÃO";
             startBtn.style.background = "red";
@@ -213,17 +212,17 @@ function enviarParaCloudinary(base64Image) {
 
 getEl('resetBtn').addEventListener('click', () => {
     getEl('previewStage').style.display = 'none';
-    getEl('captureStage').style.display = 'grid';
+    getEl('mainApp').style.display = 'none';
+    getEl('themeSelection').style.display = 'flex';
+    
     getEl('finalPreview').src = "";
     getEl('qrcode').innerHTML = "";
     if(downloadBtn) downloadBtn.style.display = 'none';
     if(progressBar) progressBar.style.width = "0%";
-    // Só libera o botão se a câmera estiver realmente transmitindo
-    if (video.srcObject && video.srcObject.active) {
-        captureBtn.disabled = false;
-    } else {
-        captureBtn.disabled = true;
-        iniciarCamera(); // Tenta recuperar a câmera se ela tiver sido perdida
+    
+    // Para a câmera para economizar recursos enquanto escolhe novo tema
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
     }
 });
 
@@ -380,3 +379,40 @@ window.addEventListener('load', atualizarGaleria);
 
 // Botão Limpar
 getEl("clearGalleryBtn").addEventListener("click", limparGaleria);
+
+// --- LOGICA DE TEMAS ---
+
+function selectTheme(valor, nomeAmigavel) {
+    if(aiStyle) aiStyle.value = valor;
+    const tag = getEl('currentThemeTag');
+    if(tag) tag.querySelector('span').innerText = nomeAmigavel.toUpperCase();
+    
+    getEl('themeSelection').style.display = 'none';
+    getEl('mainApp').style.display = 'flex';
+    iniciarCamera();
+}
+
+getEl('changeThemeBtn').addEventListener('click', () => {
+    getEl('mainApp').style.display = 'none';
+    getEl('themeSelection').style.display = 'flex';
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+    }
+});
+
+// --- ATALHOS DE TECLADO ---
+window.addEventListener('keydown', (e) => {
+    const themeSelection = getEl('themeSelection');
+    if (themeSelection && themeSelection.style.display !== 'none') {
+        switch (e.key) {
+            case '1': selectTheme('e_cartoonify', 'Estilo Disco'); break;
+            case '2': selectTheme('e_oil_paint', 'Pintura a Óleo'); break;
+            case '3': selectTheme('e_art:incognito', 'Filtro Mistério'); break;
+            case '4': selectTheme('e_background_removal/u_fundo_espaco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Espaço Sideral'); break;
+            case '5': selectTheme('e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Floresta Encantada'); break;
+            case '6': selectTheme('e_improve', 'Teste 6'); break;
+            case '7': selectTheme('e_improve', 'Teste 7'); break;
+            case '8': selectTheme('e_improve', 'Teste 8'); break;
+        }
+    }
+});

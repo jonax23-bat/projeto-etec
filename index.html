@@ -19,7 +19,7 @@
     <!-- Tela de Flash -->
     <div id="flashOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999;"></div>
 
-    <!-- TELA DE ENTRADA -->
+    <!-- TELA 1: ENTRADA -->
     <div id="landingPage" class="landing-container">
         <div class="landing-content">
             <div class="logo-wrapper">
@@ -31,10 +31,65 @@
         </div>
     </div>
 
+    <!-- TELA 2: SELEÇÃO DE TEMAS -->
+    <div id="themeSelection" class="landing-container" style="display: none; flex-direction: column;">
+        <h2 class="orbitron-title" style="font-size: 2rem; margin-bottom: 30px;">ESCOLHA SEU <span class="cyan-text">ESTILO</span></h2>
+        <div class="themes-grid">
+            <div class="theme-card" onclick="selectTheme('e_cartoonify', 'Estilo Disco')">
+                <div class="theme-badge">1</div>
+                <div class="theme-preview" style="background: url('img/DISCO.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <span>DISCO 🪩</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_oil_paint', 'Pintura a Óleo')">
+                <div class="theme-badge">2</div>
+                <div class="theme-preview" style="background: url('img/ROYALTY.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <span>👑 ROYALTY</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_art:incognito', 'Filtro Mistério')">
+                <div class="theme-badge">3</div>
+                <div class="theme-preview" style="background: url('img/VEGAS.jpeg) center center / cover no-repeat; background-color: #000;"></div>
+                <span>🎰 VEGAS</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_background_removal/u_fundo_espaco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Espaço Sideral')">
+                <div class="theme-badge">4</div>
+                <div class="theme-preview" style="background: url('img/ALIEN.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <span>👽 ALIEN</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Floresta Encantada')">
+                <div class="theme-badge">5</div>
+                <div class="theme-preview" style="background: url('img/Aventura.png') center center / cover no-repeat; background-color: #000;"></div>
+                <span>🧚 FLORESTA</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_improve', 'Teste 6')">
+                <div class="theme-badge">6</div>
+                <div class="theme-preview" style="background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem;">⚙️</div>
+                <span>TESTE 6</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_improve', 'Teste 7')">
+                <div class="theme-badge">7</div>
+                <div class="theme-preview" style="background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem;">⚙️</div>
+                <span>TESTE 7</span>
+            </div>
+
+            <div class="theme-card" onclick="selectTheme('e_improve', 'Teste 8')">
+                <div class="theme-badge">8</div>
+                <div class="theme-preview" style="background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem;">⚙️</div>
+                <span>TESTE 8</span>
+            </div>
+        </div>
+    </div>
+
     <!-- APP PRINCIPAL -->
     <div id="mainApp" style="display: none;">
         <div class="header-app">
             <img src="img/logo.png" alt="Logo PixelAI" class="logo-app">
+            <div id="currentThemeTag" class="theme-tag">TEMA: <span>NENHUM</span></div>
         </div>
 
         <!-- FASE 1: CAPTURA -->
@@ -50,8 +105,7 @@
                 </div>
             </div>
             <div class="controls">
-                <label>ESCOLHA SEU ESTILO:</label>
-                <select id="aiStyle">
+                <select id="aiStyle" style="display: none;">
                     <option value="e_cartoonify">🎨 Estilo Desenho Animado</option>
                     <option value="e_oil_paint">🖌️ Pintura a Óleo</option>
                     <option value="e_art:incognito">🎭 Filtro Mistério</option>
@@ -60,6 +114,7 @@
                     <option value="e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🧚 Floresta Encantada</option>
                 </select>
                 <button id="captureBtn" disabled>📸 TIRAR FOTO</button>
+                <button id="changeThemeBtn" class="btn-change-theme">✨ TROCAR TEMA</button>
                 <button id="uploadBtn">📁 ANEXAR IMAGEM</button>
                 <input type="file" id="fileInput" accept="image/*" style="display: none;">
             </div>
