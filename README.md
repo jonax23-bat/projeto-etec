@@ -1,43 +1,44 @@
-# 📸 Photo AI Lab - Booth (Projeto ETEC)
+# Photo AI Lab - PixelAI Booth 🚀
 
-Uma aplicação web interativa simulando uma **Cabine Fotográfica de Inteligência Artificial**. O projeto captura fotos via webcam (ou upload), remove o fundo original da pessoa usando IA em nuvem e aplica cenários temáticos instantaneamente, gerando um QR Code para que o usuário baixe a foto no celular.
+Este projeto é uma cabine de fotos futurista baseada em Inteligência Artificial, desenvolvida para proporcionar uma experiência imersiva de captura e transformação de imagens em tempo real.
 
-## 🚀 Funcionalidades
-- **Captura em Tempo Real:** Integração com a câmera do dispositivo do usuário.
-- **Opção de Upload:** Permite anexar fotos já existentes caso o dispositivo não tenha câmera.
-- **Processamento em Nuvem (Cloudinary):** Utiliza o Cloudinary para processamento assíncrono das imagens.
-- **Remoção de Fundo por IA:** Usa o Add-on inteligente do Cloudinary (`e_background_removal`) para recortar a pessoa com precisão.
-- **Filtros e Cenários (`underlays`):** Insere imagens estáticas atrás da pessoa recortada de forma econômica e super-rápida.
-- **QR Code Instantâneo:** Gera automaticamente um código na tela para o usuário baixar a arte final pelo smartphone.
+## 🌟 Principais Funcionalidades (v8.0)
+
+### 📸 Experiência de Captura Profissional
+- **Sistema de Estágios**: Fluxo dinâmico que separa a tela de **Captura** da tela de **Resultado**, mantendo a interface limpa e focada.
+- **Contagem Regressiva**: Temporizador visual de 3 segundos para que o usuário se posicione antes do disparo.
+- **Efeito de Flash**: Simulação visual de flash fotográfico para feedback instantâneo.
+- **Trava de Segurança**: O botão de captura permanece bloqueado até que uma câmera válida seja detectada, evitando erros de hardware.
+
+### 🎨 Inteligência Artificial (Cloudinary)
+- **Recorte Preciso**: Integração com IA para remoção automática de fundo.
+- **Cenários Dinâmicos**: Aplicação de cenários como *Espaço Sideral* e *Floresta Encantada* via camadas de sobreposição.
+- **Filtros Artísticos**: Estilos de Cartoon, Pintura a Óleo e Filtros de Mistério aplicados via transformações de URL.
+
+### 🛠️ UX & Performance
+- **Barra de Progresso Real-Time**: Feedback visual animado enquanto a IA processa a imagem.
+- **QR Code Dinâmico**: Geração automática de código para download imediato da foto no celular.
+- **Botão de Download**: Link direto otimizado para salvar a arte final no dispositivo.
+- **Validação de API**: O sistema verifica a conectividade com o servidor antes de iniciar a experiência.
+
+## 💎 Design System Premium
+
+- **Estética Assimétrica**: Layout moderno com bordas irregulares (`border-radius` variado) que quebram o padrão quadrado convencional.
+- **Brilho Neon Split**: Card principal envolto em uma aura de luz roxa e azul que pulsa suavemente, reforçando a identidade tecnológica.
+- **Identidade Visual**: Logo centralizado em destaque (150px) e cabeçalho minimalista.
+- **Responsividade Vertical**: Proporção 4:5 otimizada para fotos de retrato, ideal para apresentações em totens ou telas verticais.
 
 ## 🛠️ Tecnologias Utilizadas
-- **Frontend Padrão:** HTML5, CSS3 (Flexbox Moderno) e JavaScript (Vanilla).
-- **Processamento de Imagem:** [Cloudinary API](https://cloudinary.com/) (Envio via REST API / Manipulação via URL).
-- **Geração de QR Code:** Biblioteca open-source `qrcodejs`.
 
-## ⚙️ Como Rodar o Projeto
-Este projeto não necessita de banco de dados ou Node.js (backend) obrigatório para testes locais. Ele roda diretamente no navegador.
-
-1. Clone ou baixe este repositório.
-2. Abra o arquivo `index.html` em seu navegador (recomendamos usar extensões como o *Live Server* do VS Code para uma melhor experiência com a permissão de câmera).
-3. Conceda permissão de uso da Câmera.
-
-## 🔑 Configurando o Cloudinary (Para Desenvolvedores)
-Para que os filtros e recortes funcionem, o projeto precisa de uma conta ativa no Cloudinary com as seguintes configurações:
-
-1. **Ativar o Add-on de IA:** Vá em seu painel do Cloudinary > *Add-ons* > e ative o **Cloudinary AI Background Removal** (plano Free).
-2. **Imagens de Fundo:** Faça o upload de imagens normais para o seu *Media Library* com os seguintes *Public IDs* exatos (ou altere no código fonte):
-   - `fada_floresta`
-   - `fundo_espaco`
-3. **Variáveis no `script.js`:**
-   Abra o arquivo `script.js` e preencha as duas variáveis principais no início do código com os dados da sua conta:
-   ```javascript
-   const CLOUD_NAME = "SEU_CLOUD_NAME";
-   const UPLOAD_PRESET = "SEU_UPLOAD_PRESET"; // (Precisa ser "Unsigned")
-   ```
-
-## 📐 Estrutura do Código
-O site é desenhado para centralizar tudo via Flexbox. Quando a foto é gerada e retornada pela API do Cloudinary, uma div oculta é ativada revelando a `urlFinalIA` (a foto processada) lado a lado com o QR Code.
+- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+).
+- **Backend de Imagem**: Cloudinary API (IA & CDN).
+- **Bibliotecas**: QRCode.js para geração de códigos.
 
 ---
-*Desenvolvido como projeto educacional.*
+
+### Como Rodar o Projeto
+1. Clone o repositório.
+2. Certifique-se de que as variáveis `CLOUD_NAME` e `UPLOAD_PRESET` no `script.js` estão configuradas.
+3. Abra o `index.html` em um servidor local (recomendado usar a extensão *Live Server* ou `python -m http.server`).
+
+*Desenvolvido para apresentações e feiras de tecnologia (ETEC).*
