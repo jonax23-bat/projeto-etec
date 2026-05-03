@@ -7,6 +7,12 @@
     <!-- Fontes e Estilos -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stely.css">
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0B0D14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="img/app-icon.png">
 </head>
 <body>
 
@@ -34,9 +40,14 @@
         <!-- FASE 1: CAPTURA -->
         <div id="captureStage" class="app-card">
             <div id="container">
-                <video id="video" autoplay></video>
+                <video id="video" autoplay playsinline></video>
                 <canvas id="canvas" style="display:none;"></canvas>
                 <div id="countdown"></div>
+                <button id="switchCameraBtn" class="btn-switch-camera">🔄</button>
+                <div id="cameraError" style="display:none; text-align:center; color:#ff4d4d; padding:20px; font-family:'Orbitron', sans-serif; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:100%; background:rgba(0,0,0,0.8); z-index:10;">
+                    <span style="font-size: 3rem;">⚠️</span><br>
+                    <b id="errTitle"></b><br><small id="errMsg"></small>
+                </div>
             </div>
             <div class="controls">
                 <label>ESCOLHA SEU ESTILO:</label>
@@ -80,5 +91,14 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registrado!', reg))
+                    .catch(err => console.log('Falha ao registrar Service Worker', err));
+            });
+        }
+    </script>
 </body>
 </html>

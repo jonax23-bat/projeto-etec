@@ -13,6 +13,10 @@ const countdownEl = getEl('countdown');
 const flash = getEl('flashOverlay');
 const progressBar = getEl('progressBar');
 const downloadBtn = getEl('downloadBtn');
+const switchCameraBtn = getEl('switchCameraBtn');
+
+let currentStream = null;
+let currentFacingMode = 'user';
 
 // --- NAVEGAÇÃO COM VALIDAÇÃO ---
 getEl('startBtn').addEventListener('click', async () => {
@@ -51,22 +55,51 @@ function iniciarCamera() {
         exibirErroCamera("SEM CONEXÃO", "Internet necessária para a IA.");
         return;
     }
-    navigator.mediaDevices.getUserMedia({ video: true })
+
+    // Esconde erro anterior
+    const errDiv = getEl('cameraError');
+    if(errDiv) errDiv.style.display = 'none';
+
+    // Para a câmera atual antes de iniciar uma nova
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+    }
+
+    const constraints = {
+        video: { 
+            facingMode: currentFacingMode,
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+        }
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
         .then(stream => { 
+            currentStream = stream;
             if(video) video.srcObject = stream; 
             if(captureBtn) captureBtn.disabled = false;
         })
-        .catch(() => exibirErroCamera("CÂMERA INDISPONÍVEL", "Verifique as permissões."));
+        .catch(err => {
+            console.error("Erro ao acessar câmera:", err);
+            exibirErroCamera("CÂMERA INDISPONÍVEL", "Verifique as permissões.");
+        });
+}
+
+if (switchCameraBtn) {
+    switchCameraBtn.addEventListener('click', () => {
+        currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
+        iniciarCamera();
+    });
 }
 
 function exibirErroCamera(titulo, mensagem) {
-    if(video) video.style.display = 'none';
     if(captureBtn) captureBtn.disabled = true;
-    getEl('container').innerHTML = `
-        <div style="text-align:center;color:#ff4d4d;padding:20px; font-family:'Orbitron', sans-serif;">
-            <span style="font-size: 3rem;">⚠️</span><br>
-            <b>${titulo}</b><br><small>${mensagem}</small>
-        </div>`;
+    const errDiv = getEl('cameraError');
+    if(errDiv) {
+        getEl('errTitle').innerText = titulo;
+        getEl('errMsg').innerText = mensagem;
+        errDiv.style.display = 'block';
+    }
 }
 
 // --- CONTAGEM E FLASH ---

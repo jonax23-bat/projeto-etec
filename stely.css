@@ -162,3 +162,68 @@ button:disabled { cursor: not-allowed !important; filter: grayscale(1) opacity(0
 .qr-text { font-size: 0.9rem; opacity: 0.8; letter-spacing: 1px; }
 
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+/* Botão de Trocar Câmera */
+.btn-switch-camera {
+    position: absolute;
+    top: 20px; right: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--primary-cyan);
+    color: white;
+    border-radius: 50%;
+    width: 50px; height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.3s;
+    backdrop-filter: blur(5px);
+}
+.btn-switch-camera:hover { background: var(--primary-cyan); transform: rotate(180deg); }
+
+/* RESPONSIVIDADE MOBILE */
+@media (max-width: 768px) {
+    #mainApp { padding: 15px; }
+
+    .orbitron-title { font-size: 2.2rem; letter-spacing: 4px; }
+    .slogan { font-size: 0.7rem; letter-spacing: 2px; }
+    .logo-landing { width: 100px; }
+
+    .app-card {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        border-radius: 40px 15px;
+        min-height: auto;
+    }
+
+    #container {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .controls {
+        width: 100%;
+        margin-top: 10px;
+        gap: 12px;
+    }
+
+    select, .controls button {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .preview-container #finalPreview {
+        border-radius: 20px 5px;
+    }
+
+    .result-actions {
+        width: 100%;
+        gap: 10px;
+    }
+
+    #qrcode {
+        padding: 10px;
+        transform: scale(0.9);
+    }
+}
