@@ -176,7 +176,13 @@ getEl('resetBtn').addEventListener('click', () => {
     getEl('qrcode').innerHTML = "";
     if(downloadBtn) downloadBtn.style.display = 'none';
     if(progressBar) progressBar.style.width = "0%";
-    captureBtn.disabled = false;
+    // Só libera o botão se a câmera estiver realmente transmitindo
+    if (video.srcObject && video.srcObject.active) {
+        captureBtn.disabled = false;
+    } else {
+        captureBtn.disabled = true;
+        iniciarCamera(); // Tenta recuperar a câmera se ela tiver sido perdida
+    }
 });
 
 getEl('uploadBtn').addEventListener('click', () => fileInput.click());

@@ -60,6 +60,16 @@ body {
     display: grid; grid-template-columns: 0.9fr 280px; gap: 30px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     align-items: center;
+    animation: neonPulse 3s infinite alternate; /* Animação Neon Divindida */
+}
+
+@keyframes neonPulse {
+    from {
+        box-shadow: -15px 0 50px rgba(108, 92, 255, 0.4), 15px 0 50px rgba(0, 212, 255, 0.4);
+    }
+    to {
+        box-shadow: -25px 0 80px rgba(108, 92, 255, 0.6), 25px 0 80px rgba(0, 212, 255, 0.6);
+    }
 }
 
 #container { 
