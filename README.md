@@ -42,3 +42,15 @@ Este projeto é uma cabine de fotos futurista baseada em Inteligência Artificia
 3. Abra o `index.html` em um servidor local (recomendado usar a extensão *Live Server* ou `python -m http.server`).
 
 *Desenvolvido para apresentações e feiras de tecnologia (ETEC).*
+
+---
+
+## 🚀 Próximos Passos (Roadmap v9.0)
+
+- [ ] **Fluxo de Navegação Aprimorado**:
+    - Criar uma tela dedicada de **Seleção de Temas** entre a Landing Page e a Captura.
+    - Substituir o menu `select` por cards visuais clicáveis com prévias dos efeitos.
+    - **Interação via Teclado**: Implementar atalhos numéricos (1, 2, 3...) para selecionar o tema sem usar o mouse, ideal para totens com teclado numérico.
+    - Lógica de retorno: Ao clicar em "Recomeçar", o usuário deve voltar para a seleção de temas, agilizando o uso em feiras.
+- [ ] **Efeitos de Transição**: Adicionar animações de fade/slide entre as trocas de tela para uma experiência mais fluida.
+- [ ] **Galeria Offline**: Sistema para visualizar as últimas 5 fotos tiradas localmente (cache).
