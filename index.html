@@ -3,53 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo AI Lab - Booth</title>
+    <title>PixelAI Booth</title>
+    <!-- Fontes e Estilos -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stely.css">
 </head>
 <body>
 
-    <h1>Photo AI Lab</h1>
+    <!-- Tela de Flash -->
+    <div id="flashOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999;"></div>
 
-    <div class="app-card">
-        <div id="container">
-            <video id="video" autoplay></video>
-            <img id="overlay" src="" style="display: none;">
-            <canvas id="canvas" style="display:none;"></canvas>
-        </div>
-
-        <div class="controls">
-            <select id="aiStyle">
-                <option value="e_cartoonify">🎨 Estilo Desenho Animado</option>
-                <option value="e_oil_paint">🖌️ Pintura a Óleo</option>
-                <option value="e_art:incognito">🎭 Filtro Mistério</option>
-                <option value="e_improve">✨ Auto-Correção Pro</option>
-               <option value="e_background_removal/u_fundo_espaco,c_fill,w_1.0,h_1.0,fl_relative/fl_layer_apply">🚀 Espaço Sideral</option>
-             
-                <option value="e_background_removal/u_fada_floresta,c_fill,w_1.0,h_1.0,fl_relative/fl_layer_apply">🧚 Floresta Encantada</option>
-            </select>
-           
-            
-            <button id="uploadBtn">📁 Anexar Imagem</button>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-            
-            <button id="captureBtn">📸 Tirar Foto & Gerar QR Code</button>
-        </div>
-
-        <div id="result" style="display: none; text-align: center;">
-            <p id="status">A processar...</p>
-            <div class="result-content">
-                <img id="finalPreview" src="" alt="Prévia da foto gerada" style="display: none;">
-                <div class="qr-container">
-                    <div id="qrcode"></div>
-                    <p style="font-size: 0.8rem; margin-top: 10px;">Digitalize para baixar</p>
-                </div>
+    <!-- TELA DE ENTRADA -->
+    <div id="landingPage" class="landing-container">
+        <div class="landing-content">
+            <div class="logo-wrapper">
+                 <img src="img/logo.png" alt="Logo PixelAI" class="logo-landing">
+                 <h1 class="orbitron-title">PIXEL<span class="cyan-text">AI</span></h1>
+                 <p class="slogan">SUA MELHOR VERSÃO, CRIADA PELA IA.</p>
             </div>
-            <button id="resetBtn" style="margin-top: 20px;">🔄 Tirar Nova Foto</button>
+            <button id="startBtn" class="btn-start">INICIAR EXPERIÊNCIA</button>
+        </div>
+    </div>
+
+    <!-- APP PRINCIPAL -->
+    <div id="mainApp" style="display: none;">
+        <div class="header-app">
+            <img src="img/logo.png" alt="Logo PixelAI" class="logo-app">
+        </div>
+
+        <!-- FASE 1: CAPTURA -->
+        <div id="captureStage" class="app-card">
+            <div id="container">
+                <video id="video" autoplay></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <div id="countdown"></div>
+            </div>
+            <div class="controls">
+                <label>ESCOLHA SEU ESTILO:</label>
+                <select id="aiStyle">
+                    <option value="e_cartoonify">🎨 Estilo Desenho Animado</option>
+                    <option value="e_oil_paint">🖌️ Pintura a Óleo</option>
+                    <option value="e_art:incognito">🎭 Filtro Mistério</option>
+                    <option value="e_improve">✨ Auto-Correção Pro</option>
+                    <option value="e_background_removal/u_fundo_espaco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🚀 Espaço Sideral</option>
+                    <option value="e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🧚 Floresta Encantada</option>
+                </select>
+                <button id="captureBtn" disabled>📸 TIRAR FOTO</button>
+                <button id="uploadBtn">📁 ANEXAR IMAGEM</button>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+        </div>
+
+        <!-- FASE 2: PRÉVIA -->
+        <div id="previewStage" class="app-card" style="display: none;">
+            <div class="preview-container">
+                <div class="loading-wrapper">
+                    <p id="status">🚀 Criando sua arte...</p>
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                </div>
+                <img id="finalPreview" src="" alt="Sua Foto">
+            </div>
+            <div class="result-actions">
+                <div id="qrcode"></div>
+                <p class="qr-text">Digitalize para baixar</p>
+                
+                <button id="downloadBtn" class="btn-download" style="display: none;">
+                    📥 BAIXAR FOTO
+                </button>
+
+                <button id="resetBtn" class="btn-reset">🔄 RECOMEÇAR</button>
+            </div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,44 +1,185 @@
-// 1. CONFIGURAÇÃO
 const CLOUD_NAME = "dg668htg4";
 const UPLOAD_PRESET = "preset-1";
 
-// 2. ELEMENTOS
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
+const getEl = (id) => document.getElementById(id);
+
+const video = getEl('video');
+const canvas = getEl('canvas');
 const ctx = canvas.getContext('2d');
-const fileInput = document.getElementById('fileInput');
-const aiStyle = document.getElementById('aiStyle');
-const resultDiv = document.getElementById('result');
-const statusTxt = document.getElementById('status');
+const fileInput = getEl('fileInput');
+const aiStyle = getEl('aiStyle');
+const captureBtn = getEl('captureBtn');
+const countdownEl = getEl('countdown');
+const flash = getEl('flashOverlay');
+const progressBar = getEl('progressBar');
+const downloadBtn = getEl('downloadBtn');
 
-// 3. INICIAR CÂMERA
-navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => { video.srcObject = stream; })
-    .catch(err => {
-        console.error("Erro na câmera:", err);
-        
-        // Esconde o elemento de vídeo vazio
-        document.getElementById('video').style.display = 'none';
-        
-        // Cria e exibe uma mensagem de erro visual
-        const errorMsg = document.createElement('div');
-        errorMsg.innerHTML = '📷 Câmera indisponível ou permissão negada.<br><br>Por favor, utilize a opção "📁 Anexar Imagem" abaixo.';
-        errorMsg.style.color = '#ff4d4d'; // Vermelho suave
-        errorMsg.style.textAlign = 'center';
-        errorMsg.style.padding = '80px 20px';
-        errorMsg.style.boxSizing = 'border-box';
-        errorMsg.style.lineHeight = '1.5'; // <-- Corrige a sobreposição
-        document.getElementById('container').appendChild(errorMsg);
-        
-        // Desabilita o botão de tirar foto pois não há câmera
-        document.getElementById('captureBtn').disabled = true;
-    });
+// --- NAVEGAÇÃO COM VALIDAÇÃO ---
+getEl('startBtn').addEventListener('click', async () => {
+    const landing = getEl('landingPage');
+    const app = getEl('mainApp');
+    const startBtn = getEl('startBtn');
 
-// 4. EVENTO PARA ANEXAR (CORRIGIDO)
-document.getElementById('uploadBtn').addEventListener('click', () => {
-    fileInput.click();
+    if (landing && app) {
+        startBtn.innerText = "VERIFICANDO...";
+        startBtn.disabled = true;
+
+        const apiAtiva = await validarCredenciaisCloudinary();
+
+        if (apiAtiva) {
+            landing.style.display = 'none';
+            app.style.display = 'flex';
+            iniciarCamera();
+        } else {
+            startBtn.innerText = "ERRO DE CONEXÃO";
+            startBtn.style.background = "red";
+            alert("Não foi possível conectar ao servidor. Verifique a internet.");
+            startBtn.disabled = false;
+        }
+    }
 });
 
+async function validarCredenciaisCloudinary() {
+    try {
+        await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/sample.jpg`, { mode: 'no-cors' });
+        return true; 
+    } catch (e) { return false; }
+}
+
+function iniciarCamera() {
+    if (!navigator.onLine) {
+        exibirErroCamera("SEM CONEXÃO", "Internet necessária para a IA.");
+        return;
+    }
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => { 
+            if(video) video.srcObject = stream; 
+            if(captureBtn) captureBtn.disabled = false;
+        })
+        .catch(() => exibirErroCamera("CÂMERA INDISPONÍVEL", "Verifique as permissões."));
+}
+
+function exibirErroCamera(titulo, mensagem) {
+    if(video) video.style.display = 'none';
+    if(captureBtn) captureBtn.disabled = true;
+    getEl('container').innerHTML = `
+        <div style="text-align:center;color:#ff4d4d;padding:20px; font-family:'Orbitron', sans-serif;">
+            <span style="font-size: 3rem;">⚠️</span><br>
+            <b>${titulo}</b><br><small>${mensagem}</small>
+        </div>`;
+}
+
+// --- CONTAGEM E FLASH ---
+captureBtn.addEventListener('click', () => {
+    let tempo = 3; 
+    captureBtn.disabled = true;
+    countdownEl.innerText = tempo;
+    countdownEl.style.display = 'block';
+
+    const intervalo = setInterval(() => {
+        tempo--;
+        if (tempo > 0) {
+            countdownEl.innerText = tempo;
+            countdownEl.style.transform = "translate(-50%, -50%) scale(1.2)";
+            setTimeout(() => { countdownEl.style.transform = "translate(-50%, -50%) scale(1)"; }, 200);
+        } else {
+            clearInterval(intervalo);
+            countdownEl.style.display = 'none';
+            executarFlashECaptura();
+        }
+    }, 1000);
+});
+
+function executarFlashECaptura() {
+    if(flash) {
+        flash.classList.add('flash-animation');
+        setTimeout(() => flash.classList.remove('flash-animation'), 500);
+    }
+    processarEEnviar(video);
+}
+
+// --- PROCESSAMENTO E DOWNLOAD ---
+function animarBarra(alvo, tempo) {
+    if(progressBar) {
+        progressBar.style.width = alvo + "%";
+        progressBar.style.transition = `width ${tempo}ms ease-in-out`;
+    }
+}
+
+function processarEEnviar(fonte) {
+    const MAX_WIDTH = 1280;
+    let larguraOriginal = fonte.videoWidth || fonte.width;
+    let alturaOriginal = fonte.videoHeight || fonte.height;
+    let ratio = MAX_WIDTH / larguraOriginal;
+
+    canvas.width = MAX_WIDTH;
+    canvas.height = alturaOriginal * ratio;
+    ctx.drawImage(fonte, 0, 0, canvas.width, canvas.height);
+    
+    getEl('captureStage').style.display = 'none';
+    getEl('previewStage').style.display = 'grid';
+    getEl('finalPreview').style.display = 'none'; 
+    getEl('status').innerText = "🚀 IA processando...";
+    if(downloadBtn) downloadBtn.style.display = 'none';
+    
+    if(progressBar) progressBar.parentElement.style.display = 'block';
+    animarBarra(90, 3000); 
+
+    enviarParaCloudinary(canvas.toDataURL('image/jpeg', 0.8));
+}
+
+function enviarParaCloudinary(base64Image) {
+    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+    const formData = new FormData();
+    formData.append('file', base64Image);
+    formData.append('upload_preset', UPLOAD_PRESET);
+
+    fetch(url, { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+        if (data.secure_url) {
+            const filtro = aiStyle.value;
+            const partes = data.secure_url.split('/upload/');
+            // Injeção de fl_attachment para forçar download
+            const urlFinal = `${partes[0]}/upload/${filtro}/fl_attachment/${partes[1]}`;
+            
+            const imgPreview = getEl('finalPreview');
+            imgPreview.onload = () => {
+                animarBarra(100, 500);
+                setTimeout(() => {
+                    getEl('status').innerText = "✅ CONCLUÍDO!";
+                    if(progressBar) progressBar.parentElement.style.display = 'none';
+                    imgPreview.style.display = 'block';
+                    
+                    if(downloadBtn) {
+                        downloadBtn.style.display = 'block';
+                        downloadBtn.onclick = () => window.location.href = urlFinal;
+                    }
+
+                    getEl('qrcode').innerHTML = ""; 
+                    new QRCode(getEl("qrcode"), { text: urlFinal, width: 150, height: 150 });
+                }, 600);
+            };
+            imgPreview.src = urlFinal;
+        }
+    })
+    .catch(() => { 
+        getEl('status').innerText = "❌ ERRO"; 
+        captureBtn.disabled = false;
+    });
+}
+
+getEl('resetBtn').addEventListener('click', () => {
+    getEl('previewStage').style.display = 'none';
+    getEl('captureStage').style.display = 'grid';
+    getEl('finalPreview').src = "";
+    getEl('qrcode').innerHTML = "";
+    if(downloadBtn) downloadBtn.style.display = 'none';
+    if(progressBar) progressBar.style.width = "0%";
+    captureBtn.disabled = false;
+});
+
+getEl('uploadBtn').addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', (e) => {
     if (e.target.files.length > 0) {
         const reader = new FileReader();
@@ -51,110 +192,4 @@ fileInput.addEventListener('change', (e) => {
     }
 });
 
-// 5. EVENTO PARA TIRAR FOTO
-document.getElementById('captureBtn').addEventListener('click', () => {
-    processarEEnviar(video);
-});
-
-// 6. PROCESSAMENTO
-function processarEEnviar(fonte) {
-    const MAX_WIDTH = 1280; 
-    let larguraOriginal = fonte.videoWidth || fonte.width;
-    let alturaOriginal = fonte.videoHeight || fonte.height;
-    
-    let novaLargura = larguraOriginal;
-    let novaAltura = alturaOriginal;
-
-    if (larguraOriginal > MAX_WIDTH) {
-        novaLargura = MAX_WIDTH;
-        novaAltura = (alturaOriginal * MAX_WIDTH) / larguraOriginal;
-    }
-
-    canvas.width = novaLargura;
-    canvas.height = novaAltura;
-    ctx.drawImage(fonte, 0, 0, novaLargura, novaAltura);
-    
-    resultDiv.style.display = 'block';
-    statusTxt.innerText = "🚀 Enviando para a Nuvem...";
-
-    // Desabilitar controles durante o envio
-    document.getElementById('uploadBtn').disabled = true;
-    document.getElementById('captureBtn').disabled = true;
-    document.getElementById('aiStyle').disabled = true;
-
-    const dataURL = canvas.toDataURL('image/jpeg', 0.7);
-    enviarParaCloudinary(dataURL);
-}
-
-// 7. ENVIO CLOUDINARY
-function enviarParaCloudinary(base64Image) {
-    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-    const formData = new FormData();
-    formData.append('file', base64Image);
-    formData.append('upload_preset', UPLOAD_PRESET);
-
-    fetch(url, { method: 'POST', body: formData })
-    .then(async response => {
-        const result = await response.json();
-        if (!response.ok) {
-            throw new Error(result.error ? result.error.message : "Erro no servidor");
-        }
-        return result;
-    })
-    .then(data => {
-        // Reabilitar controles
-        document.getElementById('uploadBtn').disabled = false;
-        document.getElementById('captureBtn').disabled = false;
-        document.getElementById('aiStyle').disabled = false;
-
-        if (data.secure_url) {
-            let filtro = aiStyle.value.replace(/ /g, '%20'); 
-            const urlFinalIA = data.secure_url.replace('/upload/', `/upload/${filtro}/`);
-            
-            document.getElementById('qrcode').innerHTML = ""; 
-            new QRCode(document.getElementById("qrcode"), {
-                text: urlFinalIA, 
-                width: 250, 
-                height: 250,
-                correctLevel : QRCode.CorrectLevel.M
-            });
-
-            // Mostra a prévia da imagem
-            const finalPreview = document.getElementById('finalPreview');
-            if (finalPreview) {
-                finalPreview.src = urlFinalIA;
-                finalPreview.style.display = 'block';
-            }
-            
-            statusTxt.innerText = "✅ Foto pronta!";
-        }
-    })
-    .catch((err) => { 
-        // Reabilitar controles em caso de erro
-        document.getElementById('uploadBtn').disabled = false;
-        document.getElementById('captureBtn').disabled = false;
-        document.getElementById('aiStyle').disabled = false;
-
-        console.error("Erro Real:", err);
-        statusTxt.innerText = "❌ Erro: " + err.message; 
-    });
-}
-
-// 8. RESETAR PROJETO
-document.getElementById('resetBtn').addEventListener('click', () => {
-    // Esconde a área de resultado
-    resultDiv.style.display = 'none';
-    
-    // Limpa a foto
-    const finalPreview = document.getElementById('finalPreview');
-    if (finalPreview) {
-        finalPreview.src = "";
-        finalPreview.style.display = 'none';
-    }
-    
-    // Limpa o QR Code
-    document.getElementById('qrcode').innerHTML = "";
-    
-    // Volta o texto de status
-    statusTxt.innerText = "A processar...";
-});
+window.addEventListener('offline', () => location.reload());
