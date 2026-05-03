@@ -18,6 +18,12 @@ const switchCameraBtn = getEl('switchCameraBtn');
 let currentStream = null;
 let currentFacingMode = 'user';
 
+// --- GALERIA E SEGUNDA TELA ---
+let galeria = JSON.parse(localStorage.getItem("pixelai_gallery")) || [];
+let telaExterna = null;
+let slideIndex = 0;
+let slideInterval = null;
+
 // --- NAVEGAÇÃO COM VALIDAÇÃO ---
 getEl('startBtn').addEventListener('click', async () => {
     const landing = getEl('landingPage');
@@ -194,6 +200,9 @@ function enviarParaCloudinary(base64Image) {
                 }, 600);
             };
             imgPreview.src = urlFinal;
+
+            // 🔥 SALVAR NA GALERIA
+            salvarNaGaleria(urlFinal);
         }
     })
     .catch(() => { 
@@ -232,3 +241,142 @@ fileInput.addEventListener('change', (e) => {
 });
 
 window.addEventListener('offline', () => location.reload());
+
+// --- LOGICA DA GALERIA ---
+
+function salvarNaGaleria(url) {
+    // Adiciona ao início do array para as mais recentes virem primeiro
+    galeria.unshift(url);
+    // Limita a 20 fotos para não pesar o localStorage
+    if (galeria.length > 20) galeria.pop();
+    
+    localStorage.setItem("pixelai_gallery", JSON.stringify(galeria));
+    atualizarGaleria();
+    enviarParaTelaExterna(url);
+}
+
+function limparGaleria() {
+    if (confirm("Tem certeza que deseja apagar todas as fotos da galeria?")) {
+        galeria = [];
+        localStorage.removeItem("pixelai_gallery");
+        atualizarGaleria();
+        
+        // Se a tela externa estiver aberta, limpa o slide
+        if (telaExterna && !telaExterna.closed) {
+            const img = telaExterna.document.getElementById("slide");
+            if (img) img.src = "";
+        }
+    }
+}
+
+function atualizarGaleria() {
+    const galeriaDiv = getEl("galeria");
+    const section = getEl("gallerySection");
+    
+    if (!galeriaDiv || galeria.length === 0) {
+        if(section) section.style.display = 'none';
+        return;
+    }
+
+    if(section) section.style.display = 'block';
+    galeriaDiv.innerHTML = "";
+
+    galeria.forEach((url) => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.alt = "Foto da Galeria";
+        img.onclick = () => {
+            getEl('captureStage').style.display = 'none';
+            getEl('previewStage').style.display = 'grid';
+            getEl('finalPreview').src = url;
+            getEl('finalPreview').style.display = 'block';
+            getEl('status').innerText = "✅ VENDO GALERIA";
+            if(downloadBtn) {
+                downloadBtn.style.display = 'block';
+                downloadBtn.onclick = () => window.location.href = url;
+            }
+            getEl('qrcode').innerHTML = ""; 
+            new QRCode(getEl("qrcode"), { text: url, width: 150, height: 150 });
+        };
+        galeriaDiv.appendChild(img);
+    });
+}
+
+// --- LOGICA SEGUNDA TELA (TV) ---
+
+getEl("openTvBtn").addEventListener("click", () => {
+    if (telaExterna && !telaExterna.closed) {
+        telaExterna.focus();
+        return;
+    }
+
+    telaExterna = window.open("", "PixelAITV", "width=1280,height=720");
+    
+    telaExterna.document.write(`
+        <html>
+        <head>
+            <title>PixelAI - Transmissão</title>
+            <style>
+                body { 
+                    margin: 0; background: #000; 
+                    display: flex; align-items: center; justify-content: center; 
+                    overflow: hidden; font-family: 'Orbitron', sans-serif;
+                }
+                #slide { 
+                    max-width: 100%; max-height: 100vh; 
+                    box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+                    border: 5px solid #00d4ff;
+                    transition: opacity 1s ease-in-out;
+                    border-radius: 20px;
+                }
+                .logo {
+                    position: absolute; bottom: 30px; right: 30px;
+                    width: 150px; opacity: 0.7;
+                }
+            </style>
+        </head>
+        <body>
+            <img id="slide" src="${galeria[0] || ''}">
+            <img src="img/logo.png" class="logo">
+        </body>
+        </html>
+    `);
+
+    iniciarSlideshow();
+});
+
+function iniciarSlideshow() {
+    if (slideInterval) clearInterval(slideInterval);
+    
+    slideInterval = setInterval(() => {
+        if (!telaExterna || telaExterna.closed || galeria.length === 0) return;
+
+        const img = telaExterna.document.getElementById("slide");
+        if (!img) return;
+
+        slideIndex = (slideIndex + 1) % galeria.length;
+        
+        img.style.opacity = '0';
+        setTimeout(() => {
+            img.src = galeria[slideIndex];
+            img.style.opacity = '1';
+        }, 1000);
+
+    }, 5000); // 5 segundos por foto
+}
+
+function enviarParaTelaExterna(url) {
+    if (!telaExterna || telaExterna.closed) return;
+
+    const img = telaExterna.document.getElementById("slide");
+    if (img) {
+        img.src = url;
+        slideIndex = 0; // Reseta para a mais nova
+    }
+}
+
+// Inicializa galeria ao carregar
+window.addEventListener('load', atualizarGaleria);
+
+// Botão Limpar
+getEl("clearGalleryBtn").addEventListener("click", limparGaleria);
