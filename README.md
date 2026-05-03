@@ -2,31 +2,26 @@
 
 Este projeto é uma cabine de fotos futurista baseada em Inteligência Artificial, desenvolvida para proporcionar uma experiência imersiva de captura e transformação de imagens em tempo real.
 
-## 🌟 Principais Funcionalidades (v8.0)
+## 🌟 Principais Funcionalidades (v9.0)
 
-### 📸 Experiência de Captura Profissional
-- **Sistema de Estágios**: Fluxo dinâmico que separa a tela de **Captura** da tela de **Resultado**, mantendo a interface limpa e focada.
-- **Contagem Regressiva**: Temporizador visual de 3 segundos para que o usuário se posicione antes do disparo.
-- **Efeito de Flash**: Simulação visual de flash fotográfico para feedback instantâneo.
-- **Trava de Segurança**: O botão de captura permanece bloqueado até que uma câmera válida seja detectada, evitando erros de hardware.
+### 📸 Experiência de Captura e Seleção
+- **Seleção Visual de Temas**: Interface dedicada com cards interativos (Disco, Royalty, Vegas, Alien, Floresta) para escolha do estilo antes da captura.
+- **Atalhos de Teclado (1-8)**: Seleção ultra-rápida de temas através do teclado numérico, ideal para totens de eventos.
+- **Sistema de Estágios**: Fluxo dinâmico: Landing -> Seleção de Temas -> Captura -> Resultado.
+- **Contagem Regressiva e Flash**: Temporizador de 3s e feedback visual de disparo.
 
-### 🎨 Inteligência Artificial (Cloudinary)
-- **Recorte Preciso**: Integração com IA para remoção automática de fundo.
-- **Cenários Dinâmicos**: Aplicação de cenários como *Espaço Sideral* e *Floresta Encantada* via camadas de sobreposição.
-- **Filtros Artísticos**: Estilos de Cartoon, Pintura a Óleo e Filtros de Mistério aplicados via transformações de URL.
+### 🖼️ Galeria & Transmissão (Modo Evento)
+- **Galeria Persistente**: Seção dedicada que armazena localmente as fotos da sessão via `localStorage`, permitindo rever QRCodes e baixar fotos anteriores.
+- **Transmissão para Segunda Tela (TV)**: Botão dedicado que abre uma janela de slideshow em tempo real, perfeita para projetar as fotos em monitores externos ou telões com transições de fade.
+- **Gestão de Galeria**: Botão de limpeza rápida para resetar a sessão entre grupos de usuários.
 
-### 🛠️ UX & Performance
-- **Barra de Progresso Real-Time**: Feedback visual animado enquanto a IA processa a imagem.
-- **QR Code Dinâmico**: Geração automática de código para download imediato da foto no celular.
-- **Botão de Download**: Link direto otimizado para salvar a arte final no dispositivo.
-- **Validação de API**: O sistema verifica a conectividade com o servidor antes de iniciar a experiência.
+### 🎨 Design & IA (Cloudinary)
+- **Neon Experience**: Borda e pulso neon em todos os elementos interativos (cards, botões, badges), mudando de cor conforme a ação.
+- **Estética Assimétrica**: Design moderno com bordas irregulares (`40px 10px 40px 10px`) e glassmorphism.
+- **Processamento IA**: Remoção de fundo e aplicação de filtros complexos via Cloudinary.
 
-## 💎 Design System Premium
-
-- **Estética Assimétrica**: Layout moderno com bordas irregulares (`border-radius` variado) que quebram o padrão quadrado convencional.
-- **Brilho Neon Split**: Card principal envolto em uma aura de luz roxa e azul que pulsa suavemente, reforçando a identidade tecnológica.
-- **Identidade Visual**: Logo centralizado em destaque (150px) e cabeçalho minimalista.
-- **Responsividade Vertical**: Proporção 4:5 otimizada para fotos de retrato, ideal para apresentações em totens ou telas verticais.
+### 📱 Otimização Mobile
+- **Responsividade Inteligente**: A galeria e os controles de transmissão são ocultados automaticamente em celulares para uma interface de captura simplificada e limpa.
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -37,20 +32,15 @@ Este projeto é uma cabine de fotos futurista baseada em Inteligência Artificia
 ---
 
 ### Como Rodar o Projeto
-1. Clone o repositório.
-2. Certifique-se de que as variáveis `CLOUD_NAME` e `UPLOAD_PRESET` no `script.js` estão configuradas.
-3. Abra o `index.html` em um servidor local (recomendado usar a extensão *Live Server* ou `python -m http.server`).
+1. Certifique-se de que as variáveis `CLOUD_NAME` e `UPLOAD_PRESET` no `script.js` estão configuradas.
+2. Abra o `index.html` em um servidor local (Live Server recomendado).
+3. Use as teclas **1 a 8** para testar a seleção rápida de temas na tela de estilos.
 
 *Desenvolvido para apresentações e feiras de tecnologia (ETEC).*
 
 ---
 
-## 🚀 Próximos Passos (Roadmap v9.0)
-
-- [ ] **Fluxo de Navegação Aprimorado**:
-    - Criar uma tela dedicada de **Seleção de Temas** entre a Landing Page e a Captura.
-    - Substituir o menu `select` por cards visuais clicáveis com prévias dos efeitos.
-    - **Interação via Teclado**: Implementar atalhos numéricos (1, 2, 3...) para selecionar o tema sem usar o mouse, ideal para totens com teclado numérico.
-    - Lógica de retorno: Ao clicar em "Recomeçar", o usuário deve voltar para a seleção de temas, agilizando o uso em feiras.
-- [ ] **Efeitos de Transição**: Adicionar animações de fade/slide entre as trocas de tela para uma experiência mais fluida.
-- [ ] **Galeria Offline**: Sistema para visualizar as últimas 5 fotos tiradas localmente (cache).
+## 🚀 Próximos Passos (Roadmap v10.0)
+- [ ] **Filtros de Vídeo**: Implementar gravação de mini-clipes (Boomerang) com IA.
+- [ ] **Integração Social**: Envio direto para redes sociais ou e-mail.
+- [ ] **Analytics**: Contador de fotos tiradas por tema para estatísticas de evento.
