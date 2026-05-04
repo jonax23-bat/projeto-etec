@@ -17,7 +17,7 @@ const switchCameraBtn = getEl('switchCameraBtn');
 
 let currentStream = null;
 let currentFacingMode = 'user';
-let selectedFilter = 'e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply'; // filtro padrão
+let selectedFilter = 'fada_floresta.jpg'; // filtro padrão
 
 // --- GALERIA E SEGUNDA TELA ---
 let galeria = JSON.parse(localStorage.getItem("pixelai_gallery")) || [];
@@ -25,36 +25,50 @@ let telaExterna = null;
 let slideIndex = 0;
 let slideInterval = null;
 
+// --- VERIFICAÇÃO DE STATUS DO SERVIDOR ---
+function checkServerStatus() {
+    fetch('http://localhost:5000/health')
+        .then(res => {
+            if (res.ok) {
+                const light = document.querySelector('.status-light');
+                if(light) light.className = 'status-light green';
+                const text = getEl('statusText');
+                if(text) text.innerText = 'SERVIDOR ONLINE';
+                const startBtn = getEl('startBtn');
+                if(startBtn) {
+                    startBtn.disabled = false;
+                    startBtn.innerText = "INICIAR EXPERIÊNCIA";
+                }
+            } else {
+                throw new Error('Not OK');
+            }
+        })
+        .catch(() => {
+            const light = document.querySelector('.status-light');
+            if(light) light.className = 'status-light red';
+            const text = getEl('statusText');
+            if(text) text.innerText = 'SERVIDOR OFFLINE';
+            const startBtn = getEl('startBtn');
+            if(startBtn) {
+                startBtn.disabled = true;
+                startBtn.innerText = "AGUARDANDO SERVIDOR...";
+            }
+        });
+}
+
+setInterval(checkServerStatus, 3000);
+checkServerStatus();
+
 // --- NAVEGAÇÃO COM VALIDAÇÃO ---
-getEl('startBtn').addEventListener('click', async () => {
+getEl('startBtn').addEventListener('click', () => {
     const landing = getEl('landingPage');
     const themeSelection = getEl('themeSelection');
-    const startBtn = getEl('startBtn');
 
     if (landing && themeSelection) {
-        startBtn.innerText = "VERIFICANDO...";
-        startBtn.disabled = true;
-
-        const apiAtiva = await validarCredenciaisCloudinary();
-
-        if (apiAtiva) {
-            landing.style.display = 'none';
-            themeSelection.style.display = 'flex';
-        } else {
-            startBtn.innerText = "ERRO DE CONEXÃO";
-            startBtn.style.background = "red";
-            alert("Não foi possível conectar ao servidor. Verifique a internet.");
-            startBtn.disabled = false;
-        }
+        landing.style.display = 'none';
+        themeSelection.style.display = 'flex';
     }
 });
-
-async function validarCredenciaisCloudinary() {
-    try {
-        await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/upload/sample.jpg`, { mode: 'no-cors' });
-        return true; 
-    } catch (e) { return false; }
-}
 
 function iniciarCamera() {
     if (!navigator.onLine) {
@@ -168,18 +182,26 @@ function processarEEnviar(fonte) {
 }
 
 function enviarParaCloudinary(base64Image) {
-    const url = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-    const formData = new FormData();
-    formData.append('file', base64Image);
-    formData.append('upload_preset', UPLOAD_PRESET);
+    const url = 'http://localhost:5000/process';
+    const payload = {
+        image: base64Image,
+        theme: selectedFilter,
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET
+    };
 
-    fetch(url, { method: 'POST', body: formData })
+    fetch(url, { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload) 
+    })
     .then(r => r.json())
     .then(data => {
         if (data.secure_url) {
-            const filtro = selectedFilter;
+            // A API Python já nos devolve a URL final hospedada no Cloudinary!
+            // Para forçar o download no link gerado pelo cloudinary (fl_attachment)
             const partes = data.secure_url.split('/upload/');
-            const urlFinal = `${partes[0]}/upload/${filtro}/fl_attachment/${partes[1]}`;
+            const urlFinal = `${partes[0]}/upload/fl_attachment/${partes[1]}`;
             
             const imgPreview = getEl('finalPreview');
             imgPreview.onload = () => {
@@ -202,10 +224,14 @@ function enviarParaCloudinary(base64Image) {
 
             // 🔥 SALVAR NA GALERIA
             salvarNaGaleria(urlFinal);
+        } else if (data.error) {
+            getEl('status').innerText = "❌ ERRO API: " + data.error; 
+            captureBtn.disabled = false;
         }
     })
-    .catch(() => { 
-        getEl('status').innerText = "❌ ERRO"; 
+    .catch((err) => { 
+        console.error("Erro no fetch da API local:", err);
+        getEl('status').innerText = "❌ ERRO DE CONEXÃO COM O SERVIDOR LOCAL"; 
         captureBtn.disabled = false;
     });
 }
@@ -236,6 +262,8 @@ fileInput.addEventListener('change', (e) => {
             img.src = event.target.result;
         };
         reader.readAsDataURL(e.target.files[0]);
+        // Limpa o input para permitir selecionar a mesma imagem ou disparar o evento novamente
+        e.target.value = '';
     }
 });
 
@@ -413,14 +441,14 @@ window.addEventListener('keydown', (e) => {
     const themeSelection = getEl('themeSelection');
     if (themeSelection && themeSelection.style.display !== 'none') {
         switch (e.key) {
-            case '1': selectTheme('e_background_removal/u_Disco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Disco'); break;
-            case '2': selectTheme('e_background_removal/u_Rei,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Real'); break;
-            case '3': selectTheme('e_background_removal/u_Las_Vegas,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Vegas'); break;
-            case '4': selectTheme('e_background_removal/u_Alien,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Alien'); break;
-            case '5': selectTheme('e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Floresta Encantada'); break;
-            case '6': selectTheme('e_background_removal/u_Praia,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Praia'); break;
-            case '7': selectTheme('e_background_removal/u_anos80,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Anos 80'); break;
-            case '8': selectTheme('e_improve', 'Teste 8'); break;
+            case '1': selectTheme('DISCO.jpeg', 'Estilo Disco'); break;
+            case '2': selectTheme('ROYALTY.jpeg', 'Estilo Real'); break;
+            case '3': selectTheme('VEGAS.jpeg', 'Estilo Vegas'); break;
+            case '4': selectTheme('ALIEN.jpeg', 'Estilo Alien'); break;
+            case '5': selectTheme('fada_floresta.jpg', 'Floresta Encantada'); break;
+            case '6': selectTheme('Praia.jpeg', 'Estilo Praia'); break;
+            case '7': selectTheme('anos80.jpeg', 'Anos 80'); break;
+            case '8': selectTheme('none', 'Teste 8'); break;
         }
     }
 });

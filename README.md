@@ -23,18 +23,27 @@ Este projeto é uma cabine de fotos futurista baseada em Inteligência Artificia
 ### 📱 Otimização Mobile
 - **Responsividade Inteligente**: A galeria e os controles de transmissão são ocultados automaticamente em celulares para uma interface de captura simplificada e limpa.
 
+### 💻 Processamento Local (Custo Zero)
+- **Servidor Flask Independente**: A aplicação agora conta com um backend próprio em Python (`server.py`).
+- **Remoção de Fundo (Rembg)**: Recorte de fotos localmente via Inteligência Artificial usando a biblioteca `rembg`, eliminando gastos com APIs de nuvem.
+- **Ambientalização LAB (OpenCV)**: Harmonização avançada de cores (algoritmo de Reinhard) para integrar realisticamente o brilho e contraste do usuário com o cenário escolhido.
+
 ## 🛠️ Tecnologias Utilizadas
 
 - **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+).
-- **Backend de Imagem**: Cloudinary API (IA & CDN).
-- **Bibliotecas**: QRCode.js para geração de códigos.
+- **Backend**: Python 3, Flask, flask-cors.
+- **Processamento de Imagem**: `rembg` (remoção de fundo IA), `opencv-python` (harmonização de cores LAB), `Pillow` (composição final).
+- **Hospedagem Final**: Cloudinary API (usado apenas como CDN para gerar o QR Code final).
+- **Bibliotecas Web**: QRCode.js para geração de códigos.
 
 ---
 
 ### Como Rodar o Projeto
-1. Certifique-se de que as variáveis `CLOUD_NAME` e `UPLOAD_PRESET` no `script.js` estão configuradas.
+1. Dê um duplo clique no arquivo **`iniciar_cabine.bat`**.
+   - *Este arquivo irá instalar automaticamente todas as dependências do Python (como rembg e opencv) e inicializar o servidor de IA local.*
 2. Abra o `index.html` em um servidor local (Live Server recomendado).
-3. Use as teclas **1 a 8** para testar a seleção rápida de temas na tela de estilos.
+3. Aguarde a luz de status na tela inicial ficar **VERDE** (Servidor Online).
+4. Use as teclas **1 a 8** para testar a seleção rápida de temas na tela de estilos.
 
 *Desenvolvido para apresentações e feiras de tecnologia (ETEC).*
 

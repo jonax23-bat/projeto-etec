@@ -28,6 +28,12 @@ body {
     z-index: 1000;
 }
 
+.landing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .logo-landing {
     width: 150px; height: auto;
     margin-bottom: 20px;
@@ -40,6 +46,41 @@ body {
 .slogan { letter-spacing: 4px; opacity: 0.7; margin-bottom: 40px; text-align: center; }
 
 .logo-wrapper { display: flex; flex-direction: column; align-items: center; }
+
+/* Status do Servidor */
+.server-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    background: rgba(0,0,0,0.5);
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.status-light {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.status-light.red {
+    background-color: #ff4d4d;
+    color: #ff4d4d;
+}
+
+.status-light.green {
+    background-color: #00ffcc;
+    color: #00ffcc;
+}
+
+#statusText {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+}
 
 .btn-start {
     font-family: 'Orbitron', sans-serif;

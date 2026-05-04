@@ -1,0 +1,6 @@
+Flask
+flask-cors
+rembg
+opencv-python
+pillow
+requests

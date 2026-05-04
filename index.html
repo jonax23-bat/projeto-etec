@@ -26,6 +26,12 @@
                  <img src="img/logo.png" alt="Logo PixelAI" class="logo-landing">
                  <h1 class="orbitron-title">PIXEL<span class="cyan-text">AI</span></h1>
                  <p class="slogan">SUA MELHOR VERSÃO, CRIADA PELA IA.</p>
+                 
+                 <!-- Status do Servidor -->
+                 <div id="serverStatus" class="server-status">
+                     <span class="status-light red"></span>
+                     <span id="statusText">SERVIDOR OFFLINE</span>
+                 </div>
             </div>
             <button id="startBtn" class="btn-start">INICIAR EXPERIÊNCIA</button>
         </div>
@@ -35,49 +41,49 @@
     <div id="themeSelection" class="landing-container" style="display: none; flex-direction: column;">
         <h2 class="orbitron-title" style="font-size: 2rem; margin-bottom: 30px;">ESCOLHA SEU <span class="cyan-text">ESTILO</span></h2>
         <div class="themes-grid">
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_Disco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Disco')">
+            <div class="theme-card" onclick="selectTheme('DISCO.jpeg', 'Estilo Disco')">
                 <div class="theme-badge">1</div>
                 <div class="theme-preview" style="background: url('img/DISCO.jpeg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>DISCO 🪩</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_Rei,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Real')">
+            <div class="theme-card" onclick="selectTheme('ROYALTY.jpeg', 'Estilo Real')">
                 <div class="theme-badge">2</div>
                 <div class="theme-preview" style="background: url('img/ROYALTY.jpeg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>👑 ROYALTY</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_Las_Vegas,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Vegas')">
+            <div class="theme-card" onclick="selectTheme('VEGAS.jpeg', 'Estilo Vegas')">
                 <div class="theme-badge">3</div>
                 <div class="theme-preview" style="background: url('img/VEGAS.jpeg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>🎰 VEGAS</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_Alien,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Alien')">
+            <div class="theme-card" onclick="selectTheme('ALIEN.jpeg', 'Estilo Alien')">
                 <div class="theme-badge">4</div>
                 <div class="theme-preview" style="background: url('img/ALIEN.jpeg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>👽 ALIEN</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Floresta Encantada')">
+            <div class="theme-card" onclick="selectTheme('fada_floresta.jpg', 'Floresta Encantada')">
                 <div class="theme-badge">5</div>
                 <div class="theme-preview" style="background: url('img/fada_floresta.jpg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>🧚 FLORESTA</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_Praia,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Praia')">
+            <div class="theme-card" onclick="selectTheme('Praia.jpeg', 'Estilo Praia')">
                 <div class="theme-badge">6</div>
                 <div class="theme-preview" style="background: url('img/Praia.jpeg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>🏖️ PRAIA</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_background_removal/u_anos80,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Anos 80')">
+            <div class="theme-card" onclick="selectTheme('anos80.jpeg', 'Anos 80')">
                 <div class="theme-badge">7</div>
                 <div class="theme-preview" style="background: url('img/anos80.jpeg') center center / cover no-repeat; background-color: #000;"></div>
                 <span>🎤 ANOS 80</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('e_improve', 'Teste 8')">
+            <div class="theme-card" onclick="selectTheme('none', 'Teste 8')">
                 <div class="theme-badge">8</div>
                 <div class="theme-preview" style="background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem;">⚙️</div>
                 <span>TESTE 8</span>
@@ -106,14 +112,14 @@
             </div>
             <div class="controls">
                 <select id="aiStyle" style="display: none;">
-                    <option value="e_background_removal/u_Disco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🪩 Disco</option>
-                    <option value="e_background_removal/u_Rei,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">👑 Royalty</option>
-                    <option value="e_background_removal/u_Las_Vegas,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🎰 Vegas</option>
-                    <option value="e_background_removal/u_Alien,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">👽 Alien</option>
-                    <option value="e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🧚 Floresta</option>
-                    <option value="e_background_removal/u_Praia,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply">🏖️ Praia</option>
-                    <option value="e_improve">⚙️ Teste 7</option>
-                    <option value="e_improve">⚙️ Teste 8</option>
+                    <option value="DISCO.jpeg">🪩 Disco</option>
+                    <option value="ROYALTY.jpeg">👑 Royalty</option>
+                    <option value="VEGAS.jpeg">🎰 Vegas</option>
+                    <option value="ALIEN.jpeg">👽 Alien</option>
+                    <option value="fada_floresta.jpg">🧚 Floresta</option>
+                    <option value="Praia.jpeg">🏖️ Praia</option>
+                    <option value="anos80.jpeg">⚙️ Anos 80</option>
+                    <option value="none">⚙️ Teste 8</option>
                 </select>
                 <button id="captureBtn" disabled>📸 TIRAR FOTO</button>
                 <button id="changeThemeBtn" class="btn-change-theme">✨ TROCAR TEMA</button>
