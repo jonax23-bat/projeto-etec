@@ -17,6 +17,7 @@ const switchCameraBtn = getEl('switchCameraBtn');
 
 let currentStream = null;
 let currentFacingMode = 'user';
+let selectedFilter = 'e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply'; // filtro padrão
 
 // --- GALERIA E SEGUNDA TELA ---
 let galeria = JSON.parse(localStorage.getItem("pixelai_gallery")) || [];
@@ -176,9 +177,8 @@ function enviarParaCloudinary(base64Image) {
     .then(r => r.json())
     .then(data => {
         if (data.secure_url) {
-            const filtro = aiStyle.value;
+            const filtro = selectedFilter;
             const partes = data.secure_url.split('/upload/');
-            // Injeção de fl_attachment para forçar download
             const urlFinal = `${partes[0]}/upload/${filtro}/fl_attachment/${partes[1]}`;
             
             const imgPreview = getEl('finalPreview');
@@ -383,7 +383,7 @@ getEl("clearGalleryBtn").addEventListener("click", limparGaleria);
 // --- LOGICA DE TEMAS ---
 
 function selectTheme(valor, nomeAmigavel) {
-    if(aiStyle) aiStyle.value = valor;
+    selectedFilter = valor; // Guarda na variável global, sem depender do select
     const tag = getEl('currentThemeTag');
     if(tag) tag.querySelector('span').innerText = nomeAmigavel.toUpperCase();
     
@@ -405,12 +405,12 @@ window.addEventListener('keydown', (e) => {
     const themeSelection = getEl('themeSelection');
     if (themeSelection && themeSelection.style.display !== 'none') {
         switch (e.key) {
-            case '1': selectTheme('e_cartoonify', 'Estilo Disco'); break;
-            case '2': selectTheme('e_oil_paint', 'Pintura a Óleo'); break;
-            case '3': selectTheme('e_art:incognito', 'Filtro Mistério'); break;
-            case '4': selectTheme('e_background_removal/u_fundo_espaco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Espaço Sideral'); break;
+            case '1': selectTheme('e_background_removal/u_Disco,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Disco'); break;
+            case '2': selectTheme('e_background_removal/u_Rei,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Real'); break;
+            case '3': selectTheme('e_background_removal/u_Las_Vegas,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Vegas'); break;
+            case '4': selectTheme('e_background_removal/u_Alien,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Alien'); break;
             case '5': selectTheme('e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Floresta Encantada'); break;
-            case '6': selectTheme('e_improve', 'Teste 6'); break;
+            case '6': selectTheme('e_background_removal/u_Praia,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Praia'); break;
             case '7': selectTheme('e_improve', 'Teste 7'); break;
             case '8': selectTheme('e_improve', 'Teste 8'); break;
         }
