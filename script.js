@@ -387,6 +387,14 @@ function selectTheme(valor, nomeAmigavel) {
     const tag = getEl('currentThemeTag');
     if(tag) tag.querySelector('span').innerText = nomeAmigavel.toUpperCase();
     
+    // Reseta os estágios para garantir que a câmera apareça (e não a galeria ou prévia)
+    getEl('previewStage').style.display = 'none';
+    getEl('captureStage').style.display = 'grid';
+    getEl('finalPreview').src = '';
+    getEl('qrcode').innerHTML = '';
+    if(downloadBtn) downloadBtn.style.display = 'none';
+    if(progressBar) progressBar.style.width = '0%';
+
     getEl('themeSelection').style.display = 'none';
     getEl('mainApp').style.display = 'flex';
     iniciarCamera();
@@ -411,7 +419,7 @@ window.addEventListener('keydown', (e) => {
             case '4': selectTheme('e_background_removal/u_Alien,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Alien'); break;
             case '5': selectTheme('e_background_removal/u_fada_floresta,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Floresta Encantada'); break;
             case '6': selectTheme('e_background_removal/u_Praia,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Estilo Praia'); break;
-            case '7': selectTheme('e_improve', 'Teste 7'); break;
+            case '7': selectTheme('e_background_removal/u_anos80,c_scale,w_1.0,h_1.0,fl_relative/fl_layer_apply', 'Anos 80'); break;
             case '8': selectTheme('e_improve', 'Teste 8'); break;
         }
     }
