@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PixelAI Booth</title>
     <!-- Fontes e Estilos -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="stely.css">
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
@@ -14,24 +17,27 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="img/app-icon.png">
 </head>
+
 <body>
 
     <!-- Tela de Flash -->
-    <div id="flashOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999;"></div>
+    <div id="flashOverlay"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 9999;">
+    </div>
 
     <!-- TELA 1: ENTRADA -->
     <div id="landingPage" class="landing-container">
         <div class="landing-content">
             <div class="logo-wrapper">
-                 <img src="img/logo.png" alt="Logo PixelAI" class="logo-landing">
-                 <h1 class="orbitron-title">PIXEL<span class="cyan-text">AI</span></h1>
-                 <p class="slogan">SUA MELHOR VERSÃO, CRIADA PELA IA.</p>
-                 
-                 <!-- Status do Servidor -->
-                 <div id="serverStatus" class="server-status">
-                     <span class="status-light red"></span>
-                     <span id="statusText">SERVIDOR OFFLINE</span>
-                 </div>
+                <img src="img/logo.png" alt="Logo PixelAI" class="logo-landing">
+                <h1 class="orbitron-title">PIXEL<span class="cyan-text">AI</span></h1>
+                <p class="slogan">SUA MELHOR VERSÃO, CRIADA PELA IA.</p>
+
+                <!-- Status do Servidor -->
+                <div id="serverStatus" class="server-status">
+                    <span class="status-light red"></span>
+                    <span id="statusText">SERVIDOR OFFLINE</span>
+                </div>
             </div>
             <button id="startBtn" class="btn-start">INICIAR EXPERIÊNCIA</button>
         </div>
@@ -39,55 +45,66 @@
 
     <!-- TELA 2: SELEÇÃO DE TEMAS -->
     <div id="themeSelection" class="landing-container" style="display: none; flex-direction: column;">
-        <h2 class="orbitron-title" style="font-size: 2rem; margin-bottom: 30px;">ESCOLHA SEU <span class="cyan-text">ESTILO</span></h2>
+        <h2 class="orbitron-title" style="font-size: 2rem; margin-bottom: 30px;">ESCOLHA SEU <span
+                class="cyan-text">ESTILO</span></h2>
         <div class="themes-grid">
             <div class="theme-card" onclick="selectTheme('DISCO.jpeg', 'Estilo Disco')">
                 <div class="theme-badge">1</div>
-                <div class="theme-preview" style="background: url('img/DISCO.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/DISCO.jpeg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>DISCO 🪩</span>
             </div>
 
             <div class="theme-card" onclick="selectTheme('ROYALTY.jpeg', 'Estilo Real')">
                 <div class="theme-badge">2</div>
-                <div class="theme-preview" style="background: url('img/ROYALTY.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/ROYALTY.jpeg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>👑 ROYALTY</span>
             </div>
 
             <div class="theme-card" onclick="selectTheme('VEGAS.jpeg', 'Estilo Vegas')">
                 <div class="theme-badge">3</div>
-                <div class="theme-preview" style="background: url('img/VEGAS.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/VEGAS.jpeg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>🎰 VEGAS</span>
             </div>
 
             <div class="theme-card" onclick="selectTheme('ALIEN.jpeg', 'Estilo Alien')">
                 <div class="theme-badge">4</div>
-                <div class="theme-preview" style="background: url('img/ALIEN.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/ALIEN.jpeg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>👽 ALIEN</span>
             </div>
 
             <div class="theme-card" onclick="selectTheme('fada_floresta.jpg', 'Floresta Encantada')">
                 <div class="theme-badge">5</div>
-                <div class="theme-preview" style="background: url('img/fada_floresta.jpg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/fada_floresta.jpg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>🧚 FLORESTA</span>
             </div>
 
             <div class="theme-card" onclick="selectTheme('Praia.jpeg', 'Estilo Praia')">
                 <div class="theme-badge">6</div>
-                <div class="theme-preview" style="background: url('img/Praia.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/Praia.jpeg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>🏖️ PRAIA</span>
             </div>
 
             <div class="theme-card" onclick="selectTheme('anos80.jpeg', 'Anos 80')">
                 <div class="theme-badge">7</div>
-                <div class="theme-preview" style="background: url('img/anos80.jpeg') center center / cover no-repeat; background-color: #000;"></div>
+                <div class="theme-preview"
+                    style="background: url('img/anos80.jpeg') center center / cover no-repeat; background-color: #000;">
+                </div>
                 <span>🎤 ANOS 80</span>
             </div>
 
-            <div class="theme-card" onclick="selectTheme('none', 'Teste 8')">
-                <div class="theme-badge">8</div>
-                <div class="theme-preview" style="background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 2rem;">⚙️</div>
-                <span>TESTE 8</span>
-            </div>
+
         </div>
     </div>
 
@@ -105,22 +122,13 @@
                 <canvas id="canvas" style="display:none;"></canvas>
                 <div id="countdown"></div>
                 <button id="switchCameraBtn" class="btn-switch-camera">🔄</button>
-                <div id="cameraError" style="display:none; text-align:center; color:#ff4d4d; padding:20px; font-family:'Orbitron', sans-serif; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:100%; background:rgba(0,0,0,0.8); z-index:10;">
+                <div id="cameraError"
+                    style="display:none; text-align:center; color:#ff4d4d; padding:20px; font-family:'Orbitron', sans-serif; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:100%; background:rgba(0,0,0,0.8); z-index:10;">
                     <span style="font-size: 3rem;">⚠️</span><br>
                     <b id="errTitle"></b><br><small id="errMsg"></small>
                 </div>
             </div>
             <div class="controls">
-                <select id="aiStyle" style="display: none;">
-                    <option value="DISCO.jpeg">🪩 Disco</option>
-                    <option value="ROYALTY.jpeg">👑 Royalty</option>
-                    <option value="VEGAS.jpeg">🎰 Vegas</option>
-                    <option value="ALIEN.jpeg">👽 Alien</option>
-                    <option value="fada_floresta.jpg">🧚 Floresta</option>
-                    <option value="Praia.jpeg">🏖️ Praia</option>
-                    <option value="anos80.jpeg">⚙️ Anos 80</option>
-                    <option value="none">⚙️ Teste 8</option>
-                </select>
                 <button id="captureBtn" disabled>📸 TIRAR FOTO</button>
                 <button id="changeThemeBtn" class="btn-change-theme">✨ TROCAR TEMA</button>
                 <button id="uploadBtn">📁 ANEXAR IMAGEM</button>
@@ -142,7 +150,7 @@
             <div class="result-actions">
                 <div id="qrcode"></div>
                 <p class="qr-text">Digitalize para baixar</p>
-                
+
                 <button id="downloadBtn" class="btn-download" style="display: none;">
                     📥 BAIXAR FOTO
                 </button>
@@ -176,4 +184,5 @@
         }
     </script>
 </body>
+
 </html>

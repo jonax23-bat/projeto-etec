@@ -7,7 +7,6 @@ const video = getEl('video');
 const canvas = getEl('canvas');
 const ctx = canvas.getContext('2d');
 const fileInput = getEl('fileInput');
-const aiStyle = getEl('aiStyle');
 const captureBtn = getEl('captureBtn');
 const countdownEl = getEl('countdown');
 const flash = getEl('flashOverlay');
@@ -448,7 +447,6 @@ window.addEventListener('keydown', (e) => {
             case '5': selectTheme('fada_floresta.jpg', 'Floresta Encantada'); break;
             case '6': selectTheme('Praia.jpeg', 'Estilo Praia'); break;
             case '7': selectTheme('anos80.jpeg', 'Anos 80'); break;
-            case '8': selectTheme('none', 'Teste 8'); break;
         }
     }
 });
