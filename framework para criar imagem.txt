@@ -1,0 +1,39 @@
+O Prompt Técnico Diurno
+Fotografia de [DESCREVA O LOCAL/CENÁRIO AQUI, ex: uma praia deserta ao amanhecer / um escritório moderno].
+
+Câmera e Lente: Câmera DSLR full-frame, lente 50mm, abertura f/8 para garantir profundidade de campo ampla com nitidez de borda a borda, sem distorção de perspectiva.
+
+Iluminação: Iluminação principal suave, difusa e omnidirecional (estilo softbox gigante), temperatura de cor neutra (5500K). Luz de preenchimento equilibrada para eliminar sombras duras ou contrastes extremos, garantindo uma paleta de cores limpa que facilite a mesclagem e a correção de cor (color grading) na pós-produção.
+
+Enquadramento e Posição: Ângulo frontal, posicionado exatamente à altura dos olhos (eye-level). Composição baseada na regra dos terços, mas mantendo o centro do quadro livre de elementos de alto contraste para não poluir a área onde o sujeito principal será inserido.
+
+Estética: Fotorrealismo de alta resolução, 8k, hiperdetalhado, atmosfera clara (clean) e iluminação volumétrica sutil.
+
+Por que essa estrutura funciona para o seu objetivo?
+Lente 50mm e f/8: A 50mm imita a visão humana, evitando que o fundo pareça "esticado" ou abaulado (comum em lentes grande-angulares), o que deixaria a montagem final falsa. O f/8 garante que o cenário fique nítido o suficiente para ser reconhecido, mas sem competir com quem for colocado na frente.
+
+Luz Suave e Temperatura 5500K: A luz do dia neutra (5500K) e a luz difusa evitam que o fundo "jogue" cores estranhas no seu recorte. Se o fundo tiver sombras muito duras, o cérebro humano percebe na hora que a pessoa inserida na foto (que geralmente é iluminada de forma mais plana) não pertence àquele ambiente.
+
+Centro Livre: Especificar que o centro deve estar desobstruído poupa trabalho de apagar objetos indesejados que ficariam "atrás" da pessoa inserida.
+
+
+
+
+O Prompt Técnico (Template - Versão Noturna)
+Fotografia noturna de [DESCREVA O LOCAL/CENÁRIO AQUI, ex: um beco urbano molhado pela chuva / uma clareira na floresta sob o luar].
+
+Câmera e Lente: Câmera DSLR full-frame, lente 50mm f/1.8 (prime rápida). Abertura ajustada para f/4.0 para balancear a entrada de luz e manter a profundidade de campo controlada, permitindo que as luzes do fundo fiquem levemente desfocadas (bokeh suave), mas mantendo a geometria do local nítida.
+
+Iluminação: Exposição longa controlada. Capturando luz de ambiente residual e difusa para evitar sombras pretas profundas ("crushed blacks"), garantindo uma paleta de sombras ricas e mescláveis.
+
+Temperatura de Cor:
+
+[ESCOLHA UM E APAGUE O OUTRO]
+
+(Opção Cidade): Temperatura de cor quente e variada, dominada por fontes de luz artificiais (sódio/tungstênio ~3200K), com brilhos de néon dispersos.
+
+(Opção Natureza): Temperatura de cor fria e ambiente, dominada pela luz do luar e do céu noturno (~4500K a 5000K).
+
+Enquadramento e Posição: Ângulo frontal, posicionado exatamente à altura dos olhos (eye-level). Composição com centro livre e desobstruído de luzes pontuais brilhantes para não interferir na inserção do sujeito principal.
+
+Estética: Fotorrealismo noturno de alta resolução, 8k, hiperdetalhado, grão de filme fotográfico sutil e natural.
