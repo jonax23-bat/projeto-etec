@@ -111,3 +111,7 @@ projeto-etec/
 
 ## 👥 Autores & Créditos
 Desenvolvido para apresentações e feiras de tecnologia da **ETEC**.
+
+- **Jonas C. Santos**
+- **Agatha Engelmann**
+- **Gabriel Souza**
