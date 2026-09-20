@@ -68,12 +68,27 @@ if not defined PYTHON_EXE (
 :python_found
 echo [+] Python localizado em: "!PYTHON_EXE!"
 echo.
-echo [*] Verificando dependencias...
-"!PYTHON_EXE!" -m pip install -r requirements.txt
+
+:: Verificar se as bibliotecas essenciais de IA já estão instaladas
+"!PYTHON_EXE!" -c "import rembg, flask, PIL, cv2" >nul 2>&1
+if !errorlevel! neq 0 (
+    echo [*] Bibliotecas de IA nao detectadas. Instalando diretamente na maquina com python -m pip...
+    "!PYTHON_EXE!" -m ensurepip --default-pip >nul 2>&1
+    "!PYTHON_EXE!" -m pip install --upgrade pip >nul 2>&1
+    "!PYTHON_EXE!" -m pip install -r "%~dp0requirements.txt"
+    if !errorlevel! neq 0 (
+        echo [*] Tentando instalacao direta de emergencia do rembg e dependencias...
+        "!PYTHON_EXE!" -m pip install rembg[cpu] flask flask-cors Pillow opencv-python-headless requests
+    )
+)
+
+echo.
+echo [*] Abrindo a Cabine no seu navegador em http://localhost:5000 ...
+start "" http://localhost:5000
 echo.
 echo ==================================================
-echo        INICIANDO A INTELIGENCIA ARTIFICIAL
+echo   SERVIDOR INICIADO COM SUCESSO!
+echo   Pressione Ctrl+C para encerrar.
 echo ==================================================
-echo.
-"!PYTHON_EXE!" server.py
+"!PYTHON_EXE!" "%~dp0server.py"
 pause

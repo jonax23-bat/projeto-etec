@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PixelAI Booth</title>
     <!-- Fontes e Estilos -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="stely.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stely.css?v=6">
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0B0D14">
@@ -29,15 +27,15 @@
     <div id="landingPage" class="landing-container">
         <div class="landing-content">
             <div class="logo-wrapper">
-                <img src="img/logo.png" alt="Logo PixelAI" class="logo-landing">
-                <h1 class="orbitron-title">PIXEL<span class="cyan-text">AI</span></h1>
-                <p class="slogan">SUA MELHOR VERSÃO, CRIADA PELA IA.</p>
-
-                <!-- Status do Servidor -->
-                <div id="serverStatus" class="server-status">
-                    <span class="status-light red"></span>
-                    <span id="statusText">SERVIDOR OFFLINE</span>
-                </div>
+                 <img src="img/logo.png" alt="Logo PixelAI" class="logo-landing">
+                 <h1 class="orbitron-title">PIXEL<span class="cyan-text">AI</span></h1>
+                 <p class="slogan">SUA MELHOR VERSÃO, CRIADA PELA IA.</p>
+                 
+                 <!-- Status do Servidor -->
+                 <div id="serverStatus" class="server-status">
+                     <span class="status-light red"></span>
+                     <span id="statusText">SERVIDOR OFFLINE</span>
+                 </div>
             </div>
             <button id="startBtn" class="btn-start">INICIAR EXPERIÊNCIA</button>
         </div>
@@ -104,7 +102,13 @@
                 <span>🎤 ANOS 80</span>
             </div>
 
-
+            <div class="theme-card" onclick="selectTheme('INFANTIL.jpg', 'Infantil / Cartoon')">
+                <div class="theme-badge">8</div>
+                <div class="theme-preview"
+                    style="background: url('img/INFANTIL.jpg') center center / cover no-repeat; background-color: #000;">
+                </div>
+                <span>🎨 INFANTIL</span>
+            </div>
         </div>
     </div>
 
@@ -117,69 +121,103 @@
 
         <!-- FASE 1: CAPTURA -->
         <div id="captureStage" class="app-card">
-            <div id="container">
-                <video id="video" autoplay playsinline></video>
-                <canvas id="canvas" style="display:none;"></canvas>
-                <div id="countdown"></div>
-                <button id="switchCameraBtn" class="btn-switch-camera">🔄</button>
-                <div id="cameraError"
-                    style="display:none; text-align:center; color:#ff4d4d; padding:20px; font-family:'Orbitron', sans-serif; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:100%; background:rgba(0,0,0,0.8); z-index:10;">
-                    <span style="font-size: 3rem;">⚠️</span><br>
-                    <b id="errTitle"></b><br><small id="errMsg"></small>
+            <div class="capture-body">
+                <div id="container">
+                    <!-- Stream Direto da Câmera -->
+                    <video id="video" autoplay playsinline></video>
+                    
+                    <canvas id="canvas" style="display:none;"></canvas>
+                    <div id="countdown"></div>
+                    <button id="switchCameraBtn" class="btn-switch-camera" title="Trocar Câmera">🔄</button>
+                    <div id="cameraError" style="display:none; text-align:center; color:#ff4d4d; padding:20px; font-family:'Orbitron', sans-serif; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:100%; background:rgba(0,0,0,0.8); z-index:10; border-radius: 12px;">
+                        <span style="font-size: 3rem;">⚠️</span><br>
+                        <b id="errTitle"></b><br><small id="errMsg"></small>
+                    </div>
                 </div>
-            </div>
-            <div class="controls">
-                <button id="captureBtn" disabled>📸 TIRAR FOTO</button>
-                <button id="changeThemeBtn" class="btn-change-theme">✨ TROCAR TEMA</button>
-                <button id="uploadBtn">📁 ANEXAR IMAGEM</button>
-                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                
+                <div class="controls">
+                    <select id="aiStyle" style="display: none;">
+                        <option value="DISCO.jpeg">🪩 Disco</option>
+                        <option value="ROYALTY.jpeg">👑 Royalty</option>
+                        <option value="VEGAS.jpeg">🎰 Vegas</option>
+                        <option value="ALIEN.jpeg">👽 Alien</option>
+                        <option value="fada_floresta.jpg">🧚 Floresta</option>
+                        <option value="Praia.jpeg">🏖️ Praia</option>
+                        <option value="anos80.jpeg">🎤 Anos 80</option>
+                        <option value="INFANTIL.jpg">🎨 Infantil</option>
+                    </select>
+                    <button id="captureBtn" class="btn-main-capture"><span class="btn-key">[ENTER]</span> 📸 TIRAR FOTO</button>
+                    <button id="changeThemeBtn" class="btn-change-theme"><span class="btn-key">[1]</span> ✨ TROCAR TEMA</button>
+                    <button id="uploadBtn" style="display: none;">📁 ANEXAR IMAGEM</button>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
             </div>
         </div>
 
         <!-- FASE 2: PRÉVIA -->
-        <div id="previewStage" class="app-card" style="display: none;">
-            <div class="preview-container">
-                <div class="loading-wrapper">
-                    <p id="status">🚀 Criando sua arte...</p>
-                    <div class="progress-bar-container">
-                        <div id="progressBar" class="progress-bar"></div>
+        <div id="previewStage" class="app-card preview-card" style="display: none;">
+            <div class="preview-layout">
+                <div class="preview-photo-box">
+                    <div class="loading-wrapper">
+                        <p id="status">🚀 Criando sua arte...</p>
+                        <div class="progress-bar-container">
+                            <div id="progressBar" class="progress-bar"></div>
+                        </div>
                     </div>
+                    <img id="finalPreview" src="" alt="Sua Foto Final">
                 </div>
-                <img id="finalPreview" src="" alt="Sua Foto">
-            </div>
-            <div class="result-actions">
-                <div id="qrcode"></div>
-                <p class="qr-text">Digitalize para baixar</p>
+                <div class="result-actions">
+                    <div class="qr-wrapper">
+                        <div id="qrcode"></div>
+                        <p class="qr-text">📱 Aponte a câmera do celular para baixar</p>
+                    </div>
+                    
+                    <button id="downloadBtn" class="btn-download" style="display: none;">
+                        📥 BAIXAR FOTO
+                    </button>
 
-                <button id="downloadBtn" class="btn-download" style="display: none;">
-                    📥 BAIXAR FOTO
-                </button>
-
-                <button id="resetBtn" class="btn-reset">🔄 RECOMEÇAR</button>
+                    <button id="resetBtn" class="btn-reset"><span class="btn-key">[ENTER]</span> 🔄 TIRAR OUTRA FOTO</button>
+                </div>
             </div>
         </div>
 
-        <!-- FASE 3: GALERIA -->
-        <div id="gallerySection" class="gallery-container" style="display: none;">
-            <div class="gallery-header">
-                <h2 class="orbitron-title" style="font-size: 1.5rem; margin: 0;">📸 GALERIA DE FOTOS</h2>
-                <div class="gallery-controls">
-                    <button id="openTvBtn" class="btn-tv">📺 TRANSMITIR (TV)</button>
-                    <button id="clearGalleryBtn" class="btn-clear">🗑️ LIMPAR</button>
+        <!-- MODAL POPUP DE GALERIA E TV -->
+        <div id="galleryModal" class="gallery-modal-overlay" style="display: none;">
+            <div class="gallery-modal-content">
+                <div class="gallery-modal-header">
+                    <div class="gallery-modal-title-box">
+                        <span class="gallery-modal-icon">📸</span>
+                        <h2 class="orbitron-title" style="font-size: 1.4rem; letter-spacing: 2px; margin: 0;">GALERIA DE FOTOS &amp; TV</h2>
+                    </div>
+                    <div class="gallery-modal-actions">
+                        <button id="openTvBtn" class="btn-tv"><span class="btn-key">[0]</span> 📺 TRANSMITIR (TV)</button>
+                        <button id="clearGalleryBtn" class="btn-clear">🗑️ LIMPAR</button>
+                        <button id="closeGalleryModalBtn" class="btn-close-modal">✖ FECHAR <span class="btn-key">[9]</span></button>
+                    </div>
+                </div>
+                
+                <div class="gallery-modal-body">
+                    <div id="galeriaGrid" class="gallery-grid-items"></div>
+                    <div id="emptyGalleryMsg" class="empty-gallery-msg" style="display: none;">
+                        <p style="font-size: 1.2rem; color: #aaa; font-family: 'Orbitron', sans-serif; margin-bottom: 8px;">NENHUMA FOTO NA GALERIA</p>
+                        <p style="color: #666; font-size: 0.9rem; margin: 0;">Tire fotos na cabine para vê-las aqui ou transmiti-las na TV!</p>
+                    </div>
                 </div>
             </div>
-            <div id="galeria"></div>
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=7"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('Service Worker registrado!', reg))
-                    .catch(err => console.log('Falha ao registrar Service Worker', err));
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+            caches.keys().then(names => {
+                for (let name of names) caches.delete(name);
             });
         }
     </script>

@@ -24,31 +24,30 @@ Seleção instantânea via cards visuais ou teclado numérico:
 3. **[ 3 ] Vegas** – Cassino iluminado e luzes vibrantes
 4. **[ 4 ] Alien / Cyberpunk** – Visual futurista tecnológico
 5. **[ 5 ] Floresta Mágica** – Natureza encantada com iluminação mágica
-6. **[ 6 ] Minimalist / Praia** – Estilo contemporâneo e clean
+6. **[ 6 ] Minimalist** – Estilo contemporâneo e clean
 7. **[ 7 ] Anos 80 / Synthwave** – Estética retrô-futurista com grid e gradientes
 8. **[ 8 ] Infantil / Cartoon** – Cenário colorido e divertido
 
 ### ⚡ 3. Processamento Híbrido de IA (Online & Offline)
 - **Modo Nuvem (Cloudinary)**: Remoção de fundo e fusão com templates de fundo na nuvem com geração rápida de URL e QR Code.
 - **Modo Servidor Local Offline (`server.py`)**:
-  - Motor de remoção de fundo com IA local via **`rembg`** (`u2net_human_seg` / ONNX Runtime).
-  - Algoritmo de suavização morfológica e anti-serrilhado inteligente.
-  - Harmonização de cores e iluminação no espaço LAB (Reinhard).
-  - Composição com fundos em alta resolução sem custo de API externa.
+  - Motor de remoção de fundo com IA local via **`rembg`** (`u2net` / ONNX Runtime).
+  - Fusão e renderização de composição com imagens locais de alta resolução.
+  - Funcionamento 100% autônomo, sem dependência de internet durante o evento.
 
 ### 📺 4. Transmissão para Telão / TV em Tempo Real (`tv.html`)
 - Slideshow dinâmico projetado para segunda tela ou telão na rede local.
-- Atualização em tempo real via **BroadcastChannel** e sincronização com servidor LAN.
-- Exibição de **QR Code individual** flutuante em cada foto para download direto no smartphone dos visitantes.
+- Atualização em tempo real via **BroadcastChannel** (janela local) e sincronização via servidor LAN.
+- Exibição de **QR Code individual** flutuante em cada foto para que os participantes baixem direto no smartphone.
 
-### 🖼️ 5. Galeria de Evento Integrada (`galeria.html` e Modal Popup)
-- Armazenamento em `localStorage` e persistência local no servidor (`gallery_data.json`).
-- Modal com zoom, download direto em alta resolução e regeneração de QR Code.
-- Botão de limpeza rápida entre turmas/sessões.
+### 🖼️ 5. Galeria de Evento Integrada (`galeria.html` e Modal)
+- Armazenamento em `localStorage` e persistência local (`gallery_data.json`).
+- Modal de zoom com download direto da imagem em alta resolução.
+- Função de limpeza rápida com confirmação de segurança para troca de turmas/sessões.
 
 ### 📱 6. PWA & Responsividade Total
 - Suporte a instalação como Web App (PWA) via `manifest.json` e `sw.js`.
-- Layout responsivo adaptado para celular, tablet e totens com suporte a **Tela Cheia (`F11`)**.
+- Layout responsivo adaptado para celular, tablet e totens verticais ou horizontais com **Full Screen (`F11`)**.
 
 ---
 
@@ -68,9 +67,9 @@ Seleção instantânea via cards visuais ou teclado numérico:
 
 ## 🚀 Como Iniciar
 
-### Opção 1: Inicialização Automática (Windows)
+### Opção 1: Inicialização Automática (Recomendado no Windows)
 Dê dois cliques no arquivo **`iniciar_cabine.bat`**.  
-O script iniciará o servidor local de IA e abrirá a cabine automaticamente em `http://localhost:5000`.
+O script iniciará o servidor local e abrirá o navegador automaticamente em `http://localhost:5000`.
 
 ### Opção 2: Linha de Comando (Python)
 1. Instale as dependências:

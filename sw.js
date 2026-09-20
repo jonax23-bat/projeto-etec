@@ -1,27 +1,22 @@
-const CACHE_NAME = 'pixelai-v1';
-const ASSETS = [
-  './',
-  './index.html',
-  './stely.css',
-  './script.js',
-  './img/logo.png',
-  './img/app-icon.png'
-];
+const CACHE_NAME = 'pixelai-v2';
 
-// Instalação do Service Worker
+// Força atualização imediata
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
+});
+
+// Limpa qualquer cache antigo do navegador
+self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map((key) => caches.delete(key)));
+    }).then(() => self.clients.claim())
   );
 });
 
-// Interceptação de Requisições
+// Busca sempre direto da rede
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
