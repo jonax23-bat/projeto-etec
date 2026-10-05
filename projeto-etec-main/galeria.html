@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelAI - Galeria de Fotos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #0b0d14;
+            background-image: url('img/onda.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 35px;
+            background: rgba(18, 20, 32, 0.85);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 25px 8px 25px 8px;
+            padding: 18px 30px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box img {
+            width: 45px;
+            height: auto;
+            filter: drop-shadow(0 0 8px #00d4ff);
+        }
+
+        .logo-box h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+        }
+        .logo-box h1 span { color: #00d4ff; }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-tv-link {
+            background: linear-gradient(135deg, #00d4ff, #6c5cff);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px 6px 20px 6px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            transition: 0.3s;
+        }
+        .btn-tv-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(18, 20, 32, 0.9);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 22px 8px 22px 8px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 4 / 3;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.03);
+            border-color: #00d4ff;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.08);
+        }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 14px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .card:hover .card-overlay { opacity: 1; }
+
+        .card-overlay span {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        /* Modal de visualização ampliada */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 7, 10, 0.94);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: rgba(18, 20, 32, 0.98);
+            border: 2px solid #00d4ff;
+            border-radius: 30px 10px 30px 10px;
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.4);
+            max-width: 900px;
+            width: 95%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 25px;
+            gap: 20px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modal-close:hover { color: #ff4d4d; }
+
+        #modalImg {
+            max-height: 55vh;
+            max-width: 100%;
+            object-fit: contain;
+            border-radius: 20px 8px 20px 8px;
+            border: 2px solid #00d4ff;
+        }
+
+        .modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        #modalQr {
+            background: #fff;
+            padding: 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #ff6bff, #6c5cff);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 20px 6px 20px 6px;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 0 20px rgba(255, 107, 255, 0.5);
+            transition: 0.3s;
+        }
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(255, 107, 255, 0.8);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #888;
+            font-family: 'Orbitron', sans-serif;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-box">
+                <img src="img/logo.png" alt="PixelAI">
+                <h1>PIXEL<span>AI</span> GALERIA</h1>
+            </div>
+            <div class="header-actions">
+                <a href="/tv" target="_blank" class="btn-tv-link">📺 MODO TV SLIDESHOW</a>
+            </div>
+        </header>
+
+        <div id="galleryGrid" class="grid">
+            <div class="empty-state">
+                <p style="font-size: 1.3rem; margin-bottom: 10px;">Carregando fotos da cabine...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização -->
+    <div id="photoModal" class="modal" onclick="closeModalOnOverlay(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()">✖</button>
+            <img id="modalImg" src="" alt="Foto Ampliada">
+            
+            <div class="modal-actions">
+                <div id="modalQr"></div>
+                <div>
+                    <p style="font-size: 0.85rem; color: #aaa; margin-bottom: 10px; font-weight: 600;">📱 Aponte a câmera para baixar direto no celular</p>
+                    <a id="modalDownloadBtn" href="" download="pixelai_foto.jpg" class="btn-download" target="_blank">📥 BAIXAR FOTO HD</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        let fotos = [];
+
+        async function carregarGaleria() {
+            try {
+                const res = await fetch('/api/gallery');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.photos) {
+                        fotos = data.photos;
+                        renderizar();
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn("Erro ao buscar da API, tentando localStorage local", e);
+            }
+
+            // Fallback localStorage
+            const local = JSON.parse(localStorage.getItem("pixelai_gallery")) || [];
+            fotos = local;
+            renderizar();
+        }
+
+        function renderizar() {
+            const grid = document.getElementById('galleryGrid');
+            if (fotos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <p style="font-size: 1.3rem; margin-bottom: 8px;">NENHUMA FOTO ENCONTRADA</p>
+                        <p style="font-size: 0.9rem; color: #666;">Tire fotos na cabine e elas aparecerão aqui automaticamente.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = '';
+            fotos.forEach((url, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${url}" alt="Foto ${index + 1}" loading="lazy">
+                    <div class="card-overlay">
+                        <span>FOTO #${fotos.length - index}</span>
+                        <span>🔍 EXPANDIR</span>
+                    </div>
+                `;
+                card.onclick = () => abrirModal(url);
+                grid.appendChild(card);
+            });
+        }
+
+        function abrirModal(url) {
+            document.getElementById('modalImg').src = url;
+            document.getElementById('modalDownloadBtn').href = url;
+            
+            const qrContainer = document.getElementById('modalQr');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: url,
+                width: 110,
+                height: 110
+            });
+
+            document.getElementById('photoModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').style.display = 'none';
+        }
+
+        function closeModalOnOverlay(e) {
+            if (e.target.id === 'photoModal') closeModal();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Carrega e atualiza a cada 5 segundos
+        carregarGaleria();
+        setInterval(carregarGaleria, 5000);
+    </script>
+</body>
+</html>

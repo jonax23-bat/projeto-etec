@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelAI - Transmissão TV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #06070a;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Fundo de partículas e gradiente sutil */
+        .ambient-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(108, 92, 255, 0.15) 0%, rgba(6, 7, 10, 0.95) 100%);
+            z-index: 1;
+        }
+
+        /* Moldura de exibição da foto */
+        .photo-frame {
+            position: relative;
+            z-index: 2;
+            max-width: 90vw;
+            max-height: 88vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 28px 10px 28px 10px;
+            border: 3px solid #00d4ff;
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.5), 0 0 100px rgba(108, 92, 255, 0.3);
+            overflow: hidden;
+            background: #000;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        #slideImage {
+            max-width: 90vw;
+            max-height: 88vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            opacity: 1;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        /* Logo flutuante */
+        .tv-header {
+            position: absolute;
+            top: 25px;
+            left: 35px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 18px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .tv-logo {
+            width: 38px;
+            height: auto;
+            filter: drop-shadow(0 0 8px #00d4ff);
+        }
+
+        .tv-title {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: #fff;
+        }
+        .tv-title span { color: #00d4ff; }
+
+        /* Badge de Nova Foto */
+        #newPhotoBadge {
+            display: none;
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            z-index: 10;
+            background: linear-gradient(135deg, #ff6bff, #6c5cff);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255, 107, 255, 0.8);
+            animation: pulseBadge 1s infinite alternate;
+        }
+
+        @keyframes pulseBadge {
+            from { transform: scale(1); box-shadow: 0 0 20px rgba(255, 107, 255, 0.6); }
+            to { transform: scale(1.08); box-shadow: 0 0 45px rgba(255, 107, 255, 1); }
+        }
+
+        /* Cartão de QR Code na TV */
+        .tv-qr-card {
+            position: absolute;
+            bottom: 25px;
+            right: 35px;
+            z-index: 10;
+            background: rgba(11, 13, 20, 0.88);
+            border: 2px solid #00d4ff;
+            border-radius: 20px 6px 20px 6px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 35px rgba(0, 212, 255, 0.4);
+            transition: opacity 0.4s ease;
+        }
+
+        #tvQrcode {
+            background: #fff;
+            padding: 6px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        #tvQrcode img, #tvQrcode canvas {
+            width: 105px !important;
+            height: 105px !important;
+            display: block;
+        }
+
+        .tv-qr-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #00d4ff;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        /* Mensagem de Aguardando Fotos */
+        .waiting-box {
+            position: absolute;
+            z-index: 5;
+            text-align: center;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .waiting-icon { font-size: 4rem; animation: float 3s infinite ease-in-out; }
+        .waiting-text { font-size: 1.5rem; letter-spacing: 3px; color: #a89eff; }
+        .waiting-sub { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: #888; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hint-fullscreen {
+            position: absolute;
+            bottom: 15px;
+            left: 35px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.35);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body onclick="toggleFullScreen()">
+    <div class="ambient-bg"></div>
+
+    <div class="tv-header">
+        <img src="img/logo.png" alt="Logo" class="tv-logo">
+        <div class="tv-title">PIXEL<span>AI</span> TV</div>
+    </div>
+
+    <div id="newPhotoBadge">✨ NOVA FOTO!</div>
+
+    <div id="photoFrame" class="photo-frame" style="display: none;">
+        <img id="slideImage" src="" alt="Slide Foto">
+    </div>
+
+    <div id="tvQrCard" class="tv-qr-card" style="display: none;">
+        <div id="tvQrcode"></div>
+        <div class="tv-qr-label">📱 BAIXAR ESTA FOTO</div>
+    </div>
+
+    <div id="waitingBox" class="waiting-box">
+        <div class="waiting-icon">📸</div>
+        <div class="waiting-text">CABINE PIXELAI PRONTA</div>
+        <div class="waiting-sub">Tire uma foto na cabine para vê-la brilhar aqui na tela!</div>
+    </div>
+
+    <div class="hint-fullscreen">Clique na tela ou aperte [F] para Tela Cheia</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        let fotos = [];
+        let currentIndex = 0;
+        let slideTimer = null;
+        let lastSeenFirstPhoto = null;
+        const qrEl = document.getElementById("tvQrcode");
+        let qrCodeObj = null;
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'f') toggleFullScreen();
+        });
+
+        async function fetchGallery() {
+            try {
+                // Tenta buscar da API de rede do servidor
+                const res = await fetch('/api/gallery');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.photos && data.photos.length > 0) {
+                        handleNewPhotoList(data.photos);
+                        return;
+                    }
+                }
+            } catch (err) {
+                // Fallback para localStorage local se for no mesmo navegador
+                const local = JSON.parse(localStorage.getItem("pixelai_gallery")) || [];
+                if (local.length > 0) {
+                    handleNewPhotoList(local);
+                    return;
+                }
+            }
+
+            if (fotos.length === 0) {
+                document.getElementById('waitingBox').style.display = 'flex';
+                document.getElementById('photoFrame').style.display = 'none';
+                document.getElementById('tvQrCard').style.display = 'none';
+            }
+        }
+
+        function handleNewPhotoList(novaLista) {
+            const hasNewPhoto = lastSeenFirstPhoto !== null && novaLista[0] !== lastSeenFirstPhoto;
+            fotos = novaLista;
+            
+            if (hasNewPhoto) {
+                lastSeenFirstPhoto = fotos[0];
+                currentIndex = 0; // Exibe imediatamente a nova foto
+                exibirBadgeNovaFoto();
+                renderSlide(fotos[0]);
+            } else if (lastSeenFirstPhoto === null) {
+                lastSeenFirstPhoto = fotos[0];
+                renderSlide(fotos[0]);
+            }
+            
+            document.getElementById('waitingBox').style.display = 'none';
+            document.getElementById('photoFrame').style.display = 'flex';
+            document.getElementById('tvQrCard').style.display = 'flex';
+        }
+
+        function exibirBadgeNovaFoto() {
+            const badge = document.getElementById('newPhotoBadge');
+            badge.style.display = 'block';
+            setTimeout(() => { badge.style.display = 'none'; }, 6000);
+        }
+
+        function renderSlide(url) {
+            const img = document.getElementById('slideImage');
+            if (!url) return;
+
+            img.style.opacity = '0';
+            setTimeout(() => {
+                img.src = url;
+                img.onload = () => {
+                    img.style.opacity = '1';
+                };
+                
+                // Atualizar QR Code
+                qrEl.innerHTML = '';
+                new QRCode(qrEl, {
+                    text: url,
+                    width: 105,
+                    height: 105,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.M
+                });
+            }, 400);
+        }
+
+        function proximoSlide() {
+            if (fotos.length === 0) return;
+            currentIndex = (currentIndex + 1) % fotos.length;
+            renderSlide(fotos[currentIndex]);
+        }
+
+        // Inicia Slideshow: muda a cada 6 segundos
+        slideTimer = setInterval(proximoSlide, 6000);
+
+        // Polling do servidor a cada 3 segundos para sincronizar novas fotos em tempo real
+        setInterval(fetchGallery, 3000);
+        fetchGallery();
+    </script>
+</body>
+</html>

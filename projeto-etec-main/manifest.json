@@ -1,0 +1,17 @@
+{
+  "name": "PixelAI Booth",
+  "short_name": "PixelAI",
+  "description": "Sua melhor versão, criada pela IA.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0B0D14",
+  "theme_color": "#6C5CFF",
+  "icons": [
+    {
+      "src": "img/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
